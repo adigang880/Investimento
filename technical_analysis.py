@@ -345,13 +345,13 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
     else:
         win_rate = 0
 
-    return buy_signals, sell_signals, total_profit, win_rate, banca
+    return buy_signals, sell_signals, total_profit, win_rate, banca, short_signals, cover_signals
 
 # Define a banca inicial
 banca_inicial = 1000  # Valor inicial para operar
 
 # Usando apenas RSI e MACD
-buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strategy(data, banca_inicial)
+buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial)
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
 print("Sinais de Venda:", sell_signals)
@@ -365,7 +365,9 @@ plt.figure(figsize=(14, 7))
 plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
 plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
 plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
-plt.title(f'Stratégia de Negociação - {ticker}')
+plt.scatter([signal[0] for signal in short_signals], [signal[1] for signal in short_signals], marker='v', color='k', label='Vendas', s=100)
+plt.scatter([signal[0] for signal in cover_signals], [signal[1] for signal in cover_signals], marker='^', color='b', label='Compras', s=100)
+plt.title(f'Estratégia de Negociação - {ticker}')
 plt.xlabel('Data')
 plt.ylabel('Preço')
 plt.legend()
@@ -373,7 +375,7 @@ plt.grid()
 plt.show()
 
 # Usando RSI, MACD, e Stochastic
-buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strategy(data, banca_inicial, use_stochastic=True)
+buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial, use_stochastic=True)
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
 print("Sinais de Venda:", sell_signals)
@@ -387,7 +389,9 @@ plt.figure(figsize=(14, 7))
 plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
 plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
 plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
-plt.title(f'Stratégia de Negociação - {ticker}')
+plt.scatter([signal[0] for signal in short_signals], [signal[1] for signal in short_signals], marker='v', color='k', label='Vendas', s=100)
+plt.scatter([signal[0] for signal in cover_signals], [signal[1] for signal in cover_signals], marker='^', color='b', label='Compras', s=100)
+plt.title(f'Estratégia de Negociação - {ticker}')
 plt.xlabel('Data')
 plt.ylabel('Preço')
 plt.legend()
@@ -395,7 +399,7 @@ plt.grid()
 plt.show()
 
 # Usando RSI, MACD, ATR, e Stochastic
-buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strategy(data, banca_inicial, use_stochastic=True, use_atr=True)
+buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial, use_stochastic=True, use_atr=True)
 
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
@@ -410,7 +414,9 @@ plt.figure(figsize=(14, 7))
 plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
 plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
 plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
-plt.title(f'Stratégia de Negociação - {ticker}')
+plt.scatter([signal[0] for signal in short_signals], [signal[1] for signal in short_signals], marker='v', color='k', label='Vendas', s=100)
+plt.scatter([signal[0] for signal in cover_signals], [signal[1] for signal in cover_signals], marker='^', color='b', label='Compras', s=100)
+plt.title(f'Estratégia de Negociação - {ticker}')
 plt.xlabel('Data')
 plt.ylabel('Preço')
 plt.legend()
