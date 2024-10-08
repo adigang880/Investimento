@@ -122,6 +122,74 @@ data = calculate_volume_delta_ewm(df)
 data = calculate_volatility(df, window)
 
 
+# Função para gerar gráficos
+def plot_indicators(data):
+    plt.figure(figsize=(14, 10))
+
+    # Gráfico do preço de fechamento
+    plt.subplot(3, 2, 1)
+    plt.plot(data['Adj Close'], label='Preço Ajustado', color='blue')
+    plt.title('Preço Ajustado')
+    plt.xlabel('Data')
+    plt.ylabel('Preço')
+    plt.legend()
+
+    # Gráfico do MACD
+    plt.subplot(3, 2, 2)
+    plt.plot(data['MACD'], label='MACD', color='green')
+    plt.plot(data['Signal_Line'], label='Linha de Sinal', color='red')
+    plt.bar(data.index, data['Histograma'], label='Histograma', color='gray', alpha=0.5)
+    plt.title('MACD')
+    plt.xlabel('Data')
+    plt.ylabel('Valores')
+    plt.legend()
+
+    # Gráfico do RSI
+    plt.subplot(3, 2, 3)
+    plt.plot(data['RSI'], label='RSI', color='purple')
+    plt.axhline(70, color='red', linestyle='--')
+    plt.axhline(30, color='green', linestyle='--')
+    plt.title('Índice de Força Relativa (RSI)')
+    plt.xlabel('Data')
+    plt.ylabel('RSI')
+    plt.ylim(0, 100)
+    plt.legend()
+
+    # Gráfico do Estocástico
+    plt.subplot(3, 2, 4)
+    plt.plot(data['%K'], label='%K', color='blue')
+    plt.plot(data['%D'], label='%D', color='orange')
+    plt.axhline(80, color='red', linestyle='--')
+    plt.axhline(20, color='green', linestyle='--')
+    plt.title('Estocástico Lento')
+    plt.xlabel('Data')
+    plt.ylabel('Valores')
+    plt.ylim(0, 100)
+    plt.legend()
+
+    # Gráfico do ATR
+    plt.subplot(3, 2, 5)
+    plt.plot(data['ATR'], label='ATR', color='orange')
+    plt.title('Average True Range (ATR)')
+    plt.xlabel('Data')
+    plt.ylabel('ATR')
+    plt.legend()
+
+    # Gráfico do Oscilador de Volume
+    plt.subplot(3, 2, 6)
+    plt.plot(data['VO'], label='Oscilador de Volume', color='green')
+    plt.title('Volume Oscillator')
+    plt.xlabel('Data')
+    plt.ylabel('Valores')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+
+plot_indicators(data)
+
+
 def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True, use_stochastic=False, use_atr=False):
     buy_signals = []
     sell_signals = []
@@ -287,20 +355,44 @@ buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strateg
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
 print("Sinais de Venda:", sell_signals)
-print(f"Lucro Total: {total_profit}")
+print(f"Lucro Total: {total_profit:.2f}")
 print(f"Taxa de Sucesso: {win_rate * 100}%")
-print(f"Banca Final: {banca_final}")
-print(f"Porcentagem de Banca Final: {(total_profit/banca_final)*100}%")
+print(f"Banca Final: {banca_final:.2f}")
+print(f"Porcentagem de Banca Final: {(total_profit/banca_inicial)*100:.2f}%")
+
+# Plotando os resultados
+plt.figure(figsize=(14, 7))
+plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
+plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
+plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
+plt.title(f'Stratégia de Negociação - {ticker}')
+plt.xlabel('Data')
+plt.ylabel('Preço')
+plt.legend()
+plt.grid()
+plt.show()
 
 # Usando RSI, MACD, e Stochastic
 buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strategy(data, banca_inicial, use_stochastic=True)
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
 print("Sinais de Venda:", sell_signals)
-print(f"Lucro Total: {total_profit}")
+print(f"Lucro Total: {total_profit:.2f}")
 print(f"Taxa de Sucesso: {win_rate * 100}%")
-print(f"Banca Final: {banca_final}")
-print(f"Porcentagem de Banca Final: {(total_profit/banca_final)*100}%")
+print(f"Banca Final: {banca_final:.2f}")
+print(f"Porcentagem de Banca Final: {(total_profit/banca_inicial)*100:.2f}%")
+
+# Plotando os resultados
+plt.figure(figsize=(14, 7))
+plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
+plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
+plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
+plt.title(f'Stratégia de Negociação - {ticker}')
+plt.xlabel('Data')
+plt.ylabel('Preço')
+plt.legend()
+plt.grid()
+plt.show()
 
 # Usando RSI, MACD, ATR, e Stochastic
 buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strategy(data, banca_inicial, use_stochastic=True, use_atr=True)
@@ -308,8 +400,19 @@ buy_signals, sell_signals, total_profit, win_rate, banca_final = trading_strateg
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
 print("Sinais de Venda:", sell_signals)
-print(f"Lucro Total: {total_profit}")
+print(f"Lucro Total: {total_profit:.2f}")
 print(f"Taxa de Sucesso: {win_rate * 100}%")
-print(f"Banca Final: {banca_final}")
-print(f"Porcentagem de Banca Final: {(total_profit/banca_final)*100}%")
+print(f"Banca Final: {banca_final:.2f}")
+print(f"Porcentagem de Banca Final: {(total_profit/banca_inicial)*100:.2f}%")
 
+# Plotando os resultados
+plt.figure(figsize=(14, 7))
+plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
+plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
+plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
+plt.title(f'Stratégia de Negociação - {ticker}')
+plt.xlabel('Data')
+plt.ylabel('Preço')
+plt.legend()
+plt.grid()
+plt.show()
