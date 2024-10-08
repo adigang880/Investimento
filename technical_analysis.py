@@ -190,7 +190,7 @@ def plot_indicators(data):
 plot_indicators(data)
 
 
-def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True, use_stochastic=False, use_atr=False):
+def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True, use_stochastic=False, use_atr=False, stop_loss_percent=0.05):
     buy_signals = []
     sell_signals = []
     position = None  # Rastreamos a posição atual ('buy', 'sell', ou None)
@@ -240,6 +240,15 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
         # Condição base de venda usando RSI e MACD
         # Compra de ativo
         elif position == 'buy':
+            stop_loss_price = buy_price * (1 - stop_loss_percent)  # Calculando o preço de stop loss
+            if data['Close'].iloc[i] < stop_loss_price:  # Verifica se o preço atual está abaixo do stop loss
+                position = None
+                total_profit += stop_loss_price - buy_price  # Lucro da operação com stop loss
+                total_trades += 1
+                print(f'Stop Loss ativado: Vendeu em: {data.index[i]} Preço: {stop_loss_price:.2f}')
+                sell_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i+1]), 2)))  # Marca um sinal de venda
+                continue  # Move para a próxima iteração após o stop loss
+
             sell_condition = (use_rsi and current_rsi > 70)
             macd_condition_sell = (use_macd and current_macd > current_signal)
 
@@ -305,6 +314,15 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
 
         # **Cobrir Venda Descoberta** (buy to cover) - Comprar para fechar a venda
         elif position == 'sell':
+            stop_loss_price = short_price * (1 + stop_loss_percent)  # Calculando o preço de stop loss
+            if data['Close'].iloc[i] > stop_loss_price:  # Verifica se o preço atual está abaixo do stop loss
+                position = None
+                total_profit += short_price - stop_loss_price  # Lucro da operação com stop loss
+                total_trades += 1
+                print(f'Stop Loss ativado: Comprou em: {data.index[i]} Preço: {stop_loss_price:.2f}')
+                cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i+1]), 2)))  # Marca um sinal de venda
+                continue  # Move para a próxima iteração após o stop loss
+
             cover_condition = (use_rsi and current_rsi < rsi_threshold)  # Condição para fechar a venda descoberta
             macd_condition_cover = (use_macd and current_macd < current_signal)
 
@@ -374,6 +392,7 @@ plt.legend()
 plt.grid()
 plt.show()
 
+'''
 # Usando RSI, MACD, e Stochastic
 buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial, use_stochastic=True)
 # Exibe os resultados
@@ -422,3 +441,4 @@ plt.ylabel('Preço')
 plt.legend()
 plt.grid()
 plt.show()
+'''
