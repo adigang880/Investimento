@@ -13,15 +13,9 @@
 import yfinance as yf
 import matplotlib.pyplot as plt
 import numpy as np
+import datetime as dt
 
 ###################################################################################################
-# Parâmetros de entrada
-ticker = 'AZUL4.SA'  # Exemplo para ação da Azul (B3)
-start_date = '2022-01-01'
-end_date = '2024-09-30'
-period = 20  # Período para a média móvel (padrão é 20)
-window = 50  # Período para cálculo da volatilidade
-df = yf.download(ticker, start=start_date, end=end_date)
 
 
 ###################################################################################################
@@ -43,8 +37,8 @@ def calculate_volatility(df, window=10):
 # Função para calcular o True Range (TR) e o Average True Range (ATR)
 def calculate_atr(data, window=14):
     data['high-low'] = data['High'] - data['Low']
-    data['high-close_prev'] = abs(data['High'] - data['Adj Close'].shift(1))
-    data['low-close_prev'] = abs(data['Low'] - data['Adj Close'].shift(1))
+    data['high-close_prev'] = abs(data['High'] - data['Close'].shift(1))
+    data['low-close_prev'] = abs(data['Low'] - data['Close'].shift(1))
 
     # True Range é o maior valor entre essas três diferenças
     data['TR'] = data[['high-low', 'high-close_prev', 'low-close_prev']].max(axis=1)
@@ -57,8 +51,8 @@ def calculate_atr(data, window=14):
 
 # Função para calcular o MACD
 def calculate_macd(data, fast_period=12, slow_period=26, signal_period=9):
-    data['EMA_fast'] = data['Adj Close'].ewm(span=fast_period, adjust=False).mean()
-    data['EMA_slow'] = data['Adj Close'].ewm(span=slow_period, adjust=False).mean()
+    data['EMA_fast'] = data['Close'].ewm(span=fast_period, adjust=False).mean()
+    data['EMA_slow'] = data['Close'].ewm(span=slow_period, adjust=False).mean()
     data['MACD'] = data['EMA_fast'] - data['EMA_slow']
     data['Signal_Line'] = data['MACD'].ewm(span=signal_period, adjust=False).mean()
     data['Histograma'] = data['MACD'] - data['Signal_Line']
@@ -67,7 +61,7 @@ def calculate_macd(data, fast_period=12, slow_period=26, signal_period=9):
 
 # Função para calcular o RSI
 def calculate_rsi(data, period=14):
-    delta = data['Adj Close'].diff()
+    delta = data['Close'].diff()
     gain = delta.where(delta > 0, 0)
     loss = -delta.where(delta < 0, 0)
 
@@ -84,7 +78,7 @@ def calculate_rsi(data, period=14):
 def calculate_stochastic(data, k_period=14, d_period=3):
     data['L14'] = data['Low'].rolling(window=k_period).min()
     data['H14'] = data['High'].rolling(window=k_period).max()
-    data['%K'] = 100 * ((data['Adj Close'] - data['L14']) / (data['H14'] - data['L14']))
+    data['%K'] = 100 * ((data['Close'] - data['L14']) / (data['H14'] - data['L14']))
     data['%D'] = data['%K'].rolling(window=d_period).mean()
     return data
 
@@ -111,7 +105,7 @@ def calculate_volume_delta_ewm(data, fast_period=14, slow_period=28):
 
     return data
 
-
+'''
 # Calculando os indicadores
 data = calculate_macd(df)
 data = calculate_rsi(df)
@@ -120,15 +114,16 @@ data = calculate_volume_oscillator(df)
 data = calculate_atr(df)
 data = calculate_volume_delta_ewm(df)
 data = calculate_volatility(df, window)
+'''
 
-
+'''
 # Função para gerar gráficos
 def plot_indicators(data):
     plt.figure(figsize=(14, 10))
 
     # Gráfico do preço de fechamento
     plt.subplot(3, 2, 1)
-    plt.plot(data['Adj Close'], label='Preço Ajustado', color='blue')
+    plt.plot(data['Close'], label='Preço Ajustado', color='blue')
     plt.title('Preço Ajustado')
     plt.xlabel('Data')
     plt.ylabel('Preço')
@@ -188,9 +183,11 @@ def plot_indicators(data):
 
 
 plot_indicators(data)
+'''
 
 
-def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True, use_stochastic=False, use_atr=False, stop_loss_percent=0.05):
+def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rsi_threshold=20,
+                     stop_loss_percent=0.05):
     buy_signals = []
     sell_signals = []
     position = None  # Rastreamos a posição atual ('buy', 'sell', ou None)
@@ -231,9 +228,9 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
 
             # Verifica se todas as condições para compra são atendidas
             if buy_condition and macd_condition and stochastic_condition and atr_condition:
-                buy_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Adj Close'].iloc[i]), 2)))  # Marca um sinal de compra
+                buy_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Close'].iloc[i]), 2)))  # Marca um sinal de compra
                 position = 'buy'  # Atualiza a posição como 'comprado'
-                buy_price = data['Adj Close'].iloc[i]  # Armazena o preço de compra
+                buy_price = data['Close'].iloc[i]  # Armazena o preço de compra
                 data_start = data.index[i]
                 print(f"Compra em: {data.index[i].strftime('%Y-%m-%d')} | Preço: {buy_price:.2f}")
 
@@ -243,10 +240,18 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
             stop_loss_price = buy_price * (1 - stop_loss_percent)  # Calculando o preço de stop loss
             if data['Close'].iloc[i] < stop_loss_price:  # Verifica se o preço atual está abaixo do stop loss
                 position = None
-                total_profit += stop_loss_price - buy_price  # Lucro da operação com stop loss
+                sell_price = data['Close'].iloc[i]
+                total_profit += stop_loss_price - buy_price
+                datafinal = (data.index[i] - data_start).days# Lucro da operação com stop loss
+                numero_acoes = banca / buy_price
+                trade_profit = (sell_price - buy_price) * numero_acoes  # Calcula o lucro da operação
+                banca += trade_profit
+                porcentagem = (sell_price / buy_price - 1) * 100
                 total_trades += 1
-                print(f'Stop Loss ativado: Vendeu em: {data.index[i]} Preço: {stop_loss_price:.2f}')
-                sell_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i+1]), 2)))  # Marca um sinal de venda
+                print(f'Stop Loss ativado: Vendeu em: {data.index[i].strftime("%Y-%m-%d")} | Dias: {datafinal} | Preço: {stop_loss_price:.2f} '
+                      f'| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%')
+
+                sell_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i]), 2)))  # Marca um sinal de venda
                 continue  # Move para a próxima iteração após o stop loss
 
             sell_condition = (use_rsi and current_rsi > 70)
@@ -267,7 +272,7 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
 
             # Verifica se todas as condições para venda são atendidas
             if sell_condition and macd_condition_sell and stochastic_condition_sell and atr_condition_sell:
-                sell_price = data['Adj Close'].iloc[i]  # Armazena o preço de venda
+                sell_price = data['Close'].iloc[i]  # Armazena o preço de venda
                 sell_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(sell_price), 2)))  # Marca um sinal de venda
                 position = None  # Reseta a posição após a venda
                 numero_acoes = banca / buy_price
@@ -306,7 +311,7 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
 
             # Verifica se todas as condições para venda descoberta são atendidas
             if short_condition and macd_condition_short and stochastic_condition_short and atr_condition_short:
-                short_price = data['Adj Close'].iloc[i]  # Preço de venda na venda descoberta
+                short_price = data['Close'].iloc[i]  # Preço de venda na venda descoberta
                 short_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(short_price), 2)))  # Marca o sinal de venda descoberta
                 position = 'sell'  # Abre posição de venda descoberta
                 data_start = data.index[i]
@@ -317,10 +322,17 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
             stop_loss_price = short_price * (1 + stop_loss_percent)  # Calculando o preço de stop loss
             if data['Close'].iloc[i] > stop_loss_price:  # Verifica se o preço atual está abaixo do stop loss
                 position = None
-                total_profit += short_price - stop_loss_price  # Lucro da operação com stop loss
+                datafinal = (data.index[i] - data_start).days  # Lucro da operação com stop loss
+                cover_price = data['Close'].iloc[i]
+                numero_acoes = banca / short_price
+                trade_profit = (short_price - cover_price) * numero_acoes  # Lucro da venda descoberta
+                banca += trade_profit
+                porcentagem = (short_price / cover_price - 1) * 100
+                total_profit += trade_profit
                 total_trades += 1
-                print(f'Stop Loss ativado: Comprou em: {data.index[i]} Preço: {stop_loss_price:.2f}')
-                cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i+1]), 2)))  # Marca um sinal de venda
+                print(f'Stop Loss ativado: Comprou em: {data.index[i].strftime("%Y-%m-%d")} | Dias: {datafinal} | Preço: {stop_loss_price:.2f} '
+                      f'| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%')
+                cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i]), 2)))  # Marca um sinal de venda
                 continue  # Move para a próxima iteração após o stop loss
 
             cover_condition = (use_rsi and current_rsi < rsi_threshold)  # Condição para fechar a venda descoberta
@@ -340,7 +352,7 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
 
             # Verifica se todas as condições para cobertura da venda descoberta são atendidas
             if cover_condition and macd_condition_cover and stochastic_condition_cover and atr_condition_cover:
-                cover_price = data['Adj Close'].iloc[i]
+                cover_price = data['Close'].iloc[i]
                 cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(cover_price), 2)))  # Marca o sinal de cobertura
                 position = None  # Fecha a posição de venda descoberta
                 numero_acoes = banca / short_price
@@ -355,7 +367,8 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
                     successful_trades += 1
 
                 print(
-                    f"Cobertura em: {data.index[i].strftime('%Y-%m-%d')} | Dias: {datafinal} | Preço: {cover_price:.2f} | Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%")
+                    f"Cobertura em: {data.index[i].strftime('%Y-%m-%d')} | Dias: {datafinal} | Preço: {cover_price:.2f} "
+                    f"| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%")
 
     # Calcula a probabilidade de acerto
     if total_trades > 0:
@@ -365,32 +378,54 @@ def trading_strategy(data, banca, rsi_threshold=20, use_rsi=True, use_macd=True,
 
     return buy_signals, sell_signals, total_profit, win_rate, banca, short_signals, cover_signals
 
-# Define a banca inicial
-banca_inicial = 1000  # Valor inicial para operar
 
-# Usando apenas RSI e MACD
-buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial)
-# Exibe os resultados
-print("Sinais de Compra:", buy_signals)
-print("Sinais de Venda:", sell_signals)
-print(f"Lucro Total: {total_profit:.2f}")
-print(f"Taxa de Sucesso: {win_rate * 100}%")
-print(f"Banca Final: {banca_final:.2f}")
-print(f"Porcentagem de Banca Final: {(total_profit/banca_inicial)*100:.2f}%")
+def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=False, use_atr=False):
+    # Parâmetros de entrada
+    ticker = name+'.SA'  # Exemplo para ação da Azul (B3)
+    start_date = '2022-01-01'
+    end_date = dt.datetime.now().strftime('%Y-%m-%d')  # Data atual no formato 'YYYY-MM-DD'
 
-# Plotando os resultados
-plt.figure(figsize=(14, 7))
-plt.plot(data['Adj Close'], label='Preço Ajustado', alpha=0.5)
-plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g', label='Compras', s=100)
-plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r', label='Vendas', s=100)
-plt.scatter([signal[0] for signal in short_signals], [signal[1] for signal in short_signals], marker='v', color='k', label='Vendas', s=50)
-plt.scatter([signal[0] for signal in cover_signals], [signal[1] for signal in cover_signals], marker='^', color='b', label='Compras', s=50)
-plt.title(f'Estratégia de Negociação - {ticker}')
-plt.xlabel('Data')
-plt.ylabel('Preço')
-plt.legend()
-plt.grid()
-plt.show()
+    window = 50  # Período para cálculo da volatilidade
+    df = yf.download(ticker, start=start_date, end=end_date)
+    data = calculate_macd(df)
+    data = calculate_rsi(df)
+    data = calculate_stochastic(df)
+    data = calculate_volume_oscillator(df)
+    data = calculate_atr(df)
+    data = calculate_volume_delta_ewm(df)
+    data = calculate_volatility(df, window)
+
+    # Usando apenas RSI e MACD
+    buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(
+        data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr)
+    # Exibe os resultados
+    print("Sinais de Compra:", buy_signals)
+    print("Sinais de Venda:", sell_signals)
+    print(f"Lucro Total: {total_profit:.2f}")
+    print(f"Taxa de Sucesso: {win_rate * 100}%")
+    print(f"Banca Final: {banca_final:.2f}")
+    print(f"Porcentagem de Banca Final: {(total_profit / banca_inicial) * 100:.2f}%")
+
+    # Plotando os resultados
+    plt.figure(figsize=(14, 7))
+    plt.plot(data['Close'], label='Preço Ajustado', alpha=0.5)
+    plt.scatter([signal[0] for signal in buy_signals], [signal[1] for signal in buy_signals], marker='^', color='g',
+                label='Compras', s=100)
+    plt.scatter([signal[0] for signal in sell_signals], [signal[1] for signal in sell_signals], marker='v', color='r',
+                label='Vendas', s=100)
+    plt.scatter([signal[0] for signal in short_signals], [signal[1] for signal in short_signals], marker='v', color='k',
+                label='Vendas', s=50)
+    plt.scatter([signal[0] for signal in cover_signals], [signal[1] for signal in cover_signals], marker='^', color='b',
+                label='Compras', s=50)
+    plt.title(f'Estratégia de Negociação - {ticker}')
+    plt.xlabel('Data')
+    plt.ylabel('Preço')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+    return data
+
 
 '''
 # Usando RSI, MACD, e Stochastic
