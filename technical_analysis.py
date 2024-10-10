@@ -186,7 +186,7 @@ plot_indicators(data)
 '''
 
 
-def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rsi_threshold=20,
+def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, rsi_threshold=20,
                      stop_loss_percent=0.05):
     buy_signals = []
     sell_signals = []
@@ -197,6 +197,9 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
     short_signals = []  # Sinais para vendas descobertas
     cover_signals = []  # Sinais para cobrir (fechar) vendas descobertas
     data_start = []
+    value_finish_b = []
+    value_finish_v = []
+    banca = banca_inicial
 
     # Itera sobre os dados para verificar as condições
     for i in range(1, len(data)):
@@ -231,6 +234,7 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
                 buy_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Close'].iloc[i]), 2)))  # Marca um sinal de compra
                 position = 'buy'  # Atualiza a posição como 'comprado'
                 buy_price = data['Close'].iloc[i]  # Armazena o preço de compra
+                value_data = buy_price
                 data_start = data.index[i]
                 print(f"Compra em: {data.index[i].strftime('%Y-%m-%d')} | Preço: {buy_price:.2f}")
 
@@ -245,7 +249,6 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
                 datafinal = (data.index[i] - data_start).days# Lucro da operação com stop loss
                 numero_acoes = banca / buy_price
                 trade_profit = (sell_price - buy_price) * numero_acoes  # Calcula o lucro da operação
-                banca += trade_profit
                 porcentagem = (sell_price / buy_price - 1) * 100
                 total_trades += 1
                 print(f'Stop Loss ativado: Vendeu em: {data.index[i].strftime("%Y-%m-%d")} | Dias: {datafinal} | Preço: {stop_loss_price:.2f} '
@@ -277,7 +280,6 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
                 position = None  # Reseta a posição após a venda
                 numero_acoes = banca / buy_price
                 trade_profit = (sell_price - buy_price) * numero_acoes  # Calcula o lucro da operação
-                banca += trade_profit
                 porcentagem = (sell_price / buy_price - 1) * 100
                 total_profit += trade_profit  # Acumula o lucro/prejuízo total
                 total_trades += 1  # Incrementa o número de trades
@@ -315,6 +317,7 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
                 short_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(short_price), 2)))  # Marca o sinal de venda descoberta
                 position = 'sell'  # Abre posição de venda descoberta
                 data_start = data.index[i]
+                value_data = short_price
                 print(f"Venda Descoberta em: {data.index[i].strftime('%Y-%m-%d')} | Preço: {short_price:.2f}")
 
         # **Cobrir Venda Descoberta** (buy to cover) - Comprar para fechar a venda
@@ -326,7 +329,6 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
                 cover_price = data['Close'].iloc[i]
                 numero_acoes = banca / short_price
                 trade_profit = (short_price - cover_price) * numero_acoes  # Lucro da venda descoberta
-                banca += trade_profit
                 porcentagem = (short_price / cover_price - 1) * 100
                 total_profit += trade_profit
                 total_trades += 1
@@ -356,8 +358,7 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
                 cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(cover_price), 2)))  # Marca o sinal de cobertura
                 position = None  # Fecha a posição de venda descoberta
                 numero_acoes = banca / short_price
-                trade_profit = (short_price - cover_price) * numero_acoes  # Lucro da venda descoberta
-                banca += trade_profit
+                trade_profit = (short_price - cover_price) * numero_acoes  # Lucro da venda descoberto
                 porcentagem = (short_price / cover_price - 1) * 100
                 total_profit += trade_profit
                 total_trades += 1
@@ -376,7 +377,18 @@ def trading_strategy(data, banca, use_rsi, use_macd, use_stochastic, use_atr, rs
     else:
         win_rate = 0
 
-    return buy_signals, sell_signals, total_profit, win_rate, banca, short_signals, cover_signals
+    if position == 'buy':
+        value_finish_b = [data_start.strftime('%Y-%m-%d'), round(float(value_data), 2)]
+        buy_signals.pop()
+    if position == 'sell':
+        value_finish_v = [data_start.strftime('%Y-%m-%d'), round(float(value_data), 2)]
+        short_signals.pop()
+
+    porcentagem = (total_profit/banca_inicial)
+    banca = banca + total_profit
+    name_data_value = [total_profit, win_rate*100, banca, porcentagem*100]
+
+    return buy_signals, sell_signals, total_profit, win_rate, banca, short_signals, cover_signals, value_finish_b, value_finish_v, name_data_value
 
 
 def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=False, use_atr=False):
@@ -396,15 +408,15 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
     data = calculate_volatility(df, window)
 
     # Usando apenas RSI e MACD
-    buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(
-        data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr)
+    (buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals, value_finish_b,
+     value_finish_v, name_data_value) = trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr)
     # Exibe os resultados
     print("Sinais de Compra:", buy_signals)
     print("Sinais de Venda:", sell_signals)
     print(f"Lucro Total: {total_profit:.2f}")
     print(f"Taxa de Sucesso: {win_rate * 100}%")
     print(f"Banca Final: {banca_final:.2f}")
-    print(f"Porcentagem de Banca Final: {(total_profit / banca_inicial) * 100:.2f}%")
+    print(f"Porcentagem de Banca Final: {((total_profit / banca_inicial))* 100:.2f}%")
 
     # Plotando os resultados
     plt.figure(figsize=(14, 7))
@@ -417,14 +429,28 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
                 label='Vendas', s=50)
     plt.scatter([signal[0] for signal in cover_signals], [signal[1] for signal in cover_signals], marker='^', color='b',
                 label='Compras', s=50)
+    if len(value_finish_b) > 1:
+        plt.scatter([value_finish_b[0]], [value_finish_b[1]], marker='*', color='g',
+                    label='Compras', s=50)
+    if len(value_finish_v) > 1:
+        plt.scatter([value_finish_v[0]], [value_finish_v[1]], marker='*', color='r',
+                    label='Vendas', s=50)
     plt.title(f'Estratégia de Negociação - {ticker}')
     plt.xlabel('Data')
+    plt.text(0.5, -0.1, f'Lucro: {name_data_value[0]:.2f} | Taxa de Sucesso: {name_data_value[1]:.2f}% | '
+                        f'Banca Final: {name_data_value[2]:.2f} | Porcentagem da Banca Final: '
+                        f'{name_data_value[3]:.2f}%', ha='center', va='center', transform=plt.gca().transAxes)
+
     plt.ylabel('Preço')
     plt.legend()
     plt.grid()
     plt.show()
 
     return data
+
+
+def grafico():
+    return
 
 
 '''
