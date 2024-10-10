@@ -14,6 +14,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime as dt
+import time
 
 ###################################################################################################
 
@@ -387,6 +388,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
     porcentagem = (total_profit/banca_inicial)
     banca = banca + total_profit
     name_data_value = [total_profit, win_rate*100, banca, porcentagem*100]
+    time.sleep(60)
 
     return buy_signals, sell_signals, total_profit, win_rate, banca, short_signals, cover_signals, value_finish_b, value_finish_v, name_data_value
 
