@@ -11,7 +11,7 @@ with open('dados_ativos.json', 'r') as f:
 df = pd.DataFrame(data_json)
 
 # TODO para executar o codigo so colocar isso no terminal streamlit run D:\06_05_2022\Eletrica\MBA\Codigo\Projeto_aplicado\dddd.py
-# Supondo que você tenha os dados em um formato similar a este:
+# TODO Supondo que você tenha os dados em um formato similar a este:
 data = {
     'Ativo': ['Ação A', 'Ação B', 'Ação C'],  # Liste os ativos aqui
     'Entradas': [1000, 2000, 1500],  # Valores das entradas correspondentes

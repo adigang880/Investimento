@@ -260,7 +260,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                 print(f'Stop Loss ativado: Vendeu em: {data.index[i].strftime("%Y-%m-%d")} | Dias: {datafinal} | Preço: {stop_loss_price:.2f} '
                       f'| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%')
 
-                sell_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i]), 2)))  # Marca um sinal de venda
+                sell_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Close'].iloc[i]), 2)))  # Marca um sinal de venda
 
                 media_perdas.append(trade_profit)
                 media_dias.append(datafinal)
@@ -302,7 +302,8 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                     successful_trades += 1  # Incrementa o número de trades lucrativos
 
                 print(
-                    f"Venda em: {data.index[i].strftime('%Y-%m-%d')} | Dias: {datafinal} | Preço: {sell_price:.2f} | Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%")
+                    f"Venda em: {data.index[i].strftime('%Y-%m-%d')} | Dias: {datafinal} | Preço: {sell_price:.2f} "
+                    f"| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%")
 
                 media_ganhos.append(trade_profit)
                 media_dias.append(datafinal)
@@ -351,7 +352,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                 total_trades += 1
                 print(f'Stop Loss ativado: Comprou em: {data.index[i].strftime("%Y-%m-%d")} | Dias: {datafinal} | Preço: {stop_loss_price:.2f} '
                       f'| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%')
-                cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Open'].iloc[i]), 2)))  # Marca um sinal de venda
+                cover_signals.append((data.index[i].strftime('%Y-%m-%d'), round(float(data['Close'].iloc[i]), 2)))  # Marca um sinal de venda
 
                 media_perdas.append(trade_profit)
                 media_dias.append(datafinal)
@@ -418,36 +419,38 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
     compra_data_value = []
     if len(buy_signals) == len(sell_signals):
         for valor in range(len(buy_signals)):
-            numero_acoes = banca / buy_signals[valor][1]
-            trade_profit = (buy_signals[valor][1] - sell_signals[valor][1]) * numero_acoes
+            numero_acoes = banca_inicial / buy_signals[valor][1]
+            trade_profit = (sell_signals[valor][1] - buy_signals[valor][1]) * numero_acoes
             start_date_obj = dt.datetime.strptime(buy_signals[valor][0], '%Y-%m-%d')
             end_date_obj = dt.datetime.strptime(sell_signals[valor][0], '%Y-%m-%d')
             # Calcule a diferença de dias
             diferenca_dias = (end_date_obj - start_date_obj).days
-            compra_data_value = {'Entrada': buy_signals[valor][0],
+            data_value = {'Entrada': buy_signals[valor][0],
                                  'Valor Entrada': buy_signals[valor][1],
                                  'Saida': sell_signals[valor][0],
                                  'Valor Saida': sell_signals[valor][1],
                                  'Dias Ativo': diferenca_dias,
                                  'Lucro Perda': trade_profit
             }
+            compra_data_value.append(data_value)
 
     vendas_data_value = []
     if len(short_signals) == len(cover_signals):
         for valor in range(len(short_signals)):
-            numero_acoes = banca / short_signals[valor][1]
+            numero_acoes = banca_inicial / short_signals[valor][1]
             trade_profit = (short_signals[valor][1] - cover_signals[valor][1]) * numero_acoes
             start_date_obj = dt.datetime.strptime(short_signals[valor][0], '%Y-%m-%d')
             end_date_obj = dt.datetime.strptime(cover_signals[valor][0], '%Y-%m-%d')
             # Calcule a diferença de dias
             diferenca_dias = (end_date_obj - start_date_obj).days
-            vendas_data_value = {'Entrada': short_signals[valor][0],
+            data_value = {'Entrada': short_signals[valor][0],
                                  'Valor Entrada': short_signals[valor][1],
                                  'Saida': cover_signals[valor][0],
                                  'Valor Saida': cover_signals[valor][1],
                                  'Dias Ativo': diferenca_dias,
                                  'Lucro Perda': trade_profit
             }
+            vendas_data_value.append(data_value)
 
     name_data_value = [total_profit, win_rate*100, banca, porcentagem*100, successful_trades, total_trades,
                        media_ganhos, media_perdas, media_dias, evolucao_banca, vendas_data_value, compra_data_value]
@@ -504,10 +507,10 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
         'Media Dias Operacao': sum(name_data_value[8]) / len(name_data_value[8]) if len(name_data_value[8]) > 0 else 0,
         'Sinais de Compra': buy_signals,
         'Sinais de Venda': sell_signals,
-        'Lucro/Perda Por Entrada Compra': name_data_value[9] if len(name_data_value[9]) > 0 else 0,
+        'Lucro/Perda Por Entrada Compra': name_data_value[11] if len(name_data_value[11]) > 0 else 0,
         'Sinais de Venda Descoberto': short_signals,
         'Sinais de Compra Venda Descoberta': cover_signals,
-        'Lucro/Perda Por Entrada Venda Descoberto': name_data_value[8] if len(name_data_value[8]) > 0 else 0,
+        'Lucro/Perda Por Entrada Venda Descoberto': name_data_value[10] if len(name_data_value[10]) > 0 else 0,
         'Entrada Aberta Compra': value_finish_b,
         'Entrada Aberta Venda Descoberto': value_finish_v
     }

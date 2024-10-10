@@ -23,11 +23,12 @@ else:
 '''
 use_stochastic = 's'
 use_atr = 's'
+dados = []
 for name in acao:
     banca_inicial = 1000
     novo_dado = metodos(name, banca_inicial, use_stochastic=use_stochastic, use_atr=use_atr)
     # Acrescente o dicionário na lista
-    # dados.append(novo_dado)
+    dados.append(novo_dado)
 
 df = pd.DataFrame(dados)
 # Salvar DataFrame como JSON
