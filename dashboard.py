@@ -1,8 +1,16 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import json
 
-#TODO para executar o codigo so colocar isso no terminal streamlit run D:\06_05_2022\Eletrica\MBA\Codigo\Projeto_aplicado\dddd.py
+# Carregar dados do arquivo JSON
+with open('dados_ativos.json', 'r') as f:
+    data_json = [json.loads(line) for line in f]
+
+# Converter de volta para DataFrame
+df = pd.DataFrame(data_json)
+
+# TODO para executar o codigo so colocar isso no terminal streamlit run D:\06_05_2022\Eletrica\MBA\Codigo\Projeto_aplicado\dddd.py
 # Supondo que você tenha os dados em um formato similar a este:
 data = {
     'Ativo': ['Ação A', 'Ação B', 'Ação C'],  # Liste os ativos aqui
