@@ -104,14 +104,21 @@ def update_dashboard(n_clicks, ativo_selecionado):
     )
 
     # Gráfico da evolução da banca
-    # TODO fazer crescimento da banca
+    evolucao_banca_dados = dados_ativo["Evolucao Banca"]
+    # Preparar listas para os valores de Y e X
+    y_values = [evolucao_banca_dados[0]]  # Inicia com o primeiro valor (1000)
+    x_values = [evolucao_banca_dados[1]]  # A primeira data
+    for evolucao in evolucao_banca_dados[2:]:  # Começa da terceira posição
+        y_values.append(evolucao[0])  # Extraindo os valores
+        x_values.append(evolucao[1])  # Extraindo as datas
+
     evolucao_banca = dcc.Graph(
         id='grafico-banca',
         figure={
             'data': [
                 go.Scatter(
-                    x=df.index,
-                    y=(df['Close'] * 1.05).tolist(),  # Simulando a banca como 5% acima do preço de fechamento
+                    x=x_values,
+                    y=y_values,  # Simulando a banca como 5% acima do preço de fechamento
                     mode='lines+markers',
                     name='Banca (R$)',
                     marker=dict(color='blue')
