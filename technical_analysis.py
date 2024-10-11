@@ -251,11 +251,11 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
             if data['Close'].iloc[i] < stop_loss_price:  # Verifica se o preço atual está abaixo do stop loss
                 position = None
                 sell_price = data['Close'].iloc[i]
-                total_profit += stop_loss_price - buy_price
                 datafinal = (data.index[i] - data_start).days# Lucro da operação com stop loss
                 numero_acoes = banca / buy_price
                 trade_profit = (sell_price - buy_price) * numero_acoes  # Calcula o lucro da operação
                 porcentagem = (sell_price / buy_price - 1) * 100
+                total_profit += trade_profit  # Acumula o lucro/prejuízo total
                 total_trades += 1
                 print(f'Stop Loss ativado: Vendeu em: {data.index[i].strftime("%Y-%m-%d")} | Dias: {datafinal} | Preço: {stop_loss_price:.2f} '
                       f'| Lucro: R${trade_profit:.2f} | Retorno {porcentagem:.2f}%')
@@ -414,7 +414,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
         short_signals.pop()
 
     porcentagem = (total_profit/banca_inicial)
-    banca = banca + total_profit
+    banca = banca_inicial + total_profit
 
     compra_data_value = []
     if len(buy_signals) == len(sell_signals):
@@ -455,7 +455,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
     name_data_value = [total_profit, win_rate*100, banca, porcentagem*100, successful_trades, total_trades,
                        media_ganhos, media_perdas, media_dias, evolucao_banca, vendas_data_value, compra_data_value]
 
-    time.sleep(4)
+    time.sleep(2)
 
     return buy_signals, sell_signals, total_profit, win_rate, banca, short_signals, cover_signals, value_finish_b, value_finish_v, name_data_value
 

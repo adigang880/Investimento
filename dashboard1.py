@@ -5,6 +5,7 @@ import plotly.graph_objs as go
 import json
 import yfinance as yf
 
+
 # Carregar dados do arquivo JSON
 with open('dados_ativos.json', 'r') as f:
     data_json = [json.loads(line) for line in f]
