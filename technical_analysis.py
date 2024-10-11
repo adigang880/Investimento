@@ -187,7 +187,7 @@ plot_indicators(data)
 '''
 
 
-def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, rsi_threshold=20,
+def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, start_date, rsi_threshold=20,
                      stop_loss_percent=0.05):
     buy_signals = []
     sell_signals = []
@@ -204,7 +204,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
     media_ganhos = []
     media_perdas = []
     media_dias = []
-    evolucao_banca = [banca_inicial]
+    evolucao_banca = [banca_inicial, start_date]
     banca_atual = banca_inicial
 
     # Itera sobre os dados para verificar as condições
@@ -265,7 +265,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                 media_perdas.append(trade_profit)
                 media_dias.append(datafinal)
                 banca_atual = banca_atual + trade_profit
-                evolucao_banca.append(banca_atual)
+                evolucao_banca.append([banca_atual, str(data.index[i].strftime('%Y-%m-%d'))])
 
                 continue  # Move para a próxima iteração após o stop loss
 
@@ -308,7 +308,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                 media_ganhos.append(trade_profit)
                 media_dias.append(datafinal)
                 banca_atual = banca_atual + trade_profit
-                evolucao_banca.append(banca_atual)
+                evolucao_banca.append([banca_atual, str(data.index[i].strftime('%Y-%m-%d'))])
 
         # **Venda Descoberta** (short selling) - Vender antes de comprar
         if position is None:
@@ -357,7 +357,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                 media_perdas.append(trade_profit)
                 media_dias.append(datafinal)
                 banca_atual = banca_atual + trade_profit
-                evolucao_banca.append(banca_atual)
+                evolucao_banca.append([banca_atual, str(data.index[i].strftime('%Y-%m-%d'))])
 
                 continue  # Move para a próxima iteração após o stop loss
 
@@ -394,7 +394,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
                 media_ganhos.append(trade_profit)
                 media_dias.append(datafinal)
                 banca_atual = banca_atual + trade_profit
-                evolucao_banca.append(banca_atual)
+                evolucao_banca.append([banca_atual, str(data.index[i].strftime('%Y-%m-%d'))])
 
                 print(
                     f"Cobertura em: {data.index[i].strftime('%Y-%m-%d')} | Dias: {datafinal} | Preço: {cover_price:.2f} "
@@ -477,7 +477,7 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
     data = calculate_volatility(df, window)
 
     (buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals, value_finish_b,
-     value_finish_v, name_data_value) = trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr)
+     value_finish_v, name_data_value) = trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, start_date)
 
     start_date_obj = dt.datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = dt.datetime.strptime(end_date, '%Y-%m-%d')
@@ -495,11 +495,11 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
         'Porcentagem Acerto': win_rate,
         'Total Dias Passados': diferenca_dias,
         # Verifica se name_data_value[5] (Número de Operações) tem um valor válido
-        'Número Operações': name_data_value[5] if name_data_value[5] > 0 else 0,
+        'Numero Operacoes': name_data_value[5] if name_data_value[5] > 0 else 0,
         # Verifica se name_data_value[4] (Número de Operações Ganhas) tem um valor válido
-        'Número Operações Ganhas': name_data_value[4] if name_data_value[4] > 0 else 0,
+        'Numero Operacoes Ganhas': name_data_value[4] if name_data_value[4] > 0 else 0,
         # Calcula o número de operações perdidas verificando se ambos os valores são válidos
-        'Número Operações Perdas': (name_data_value[5] - name_data_value[4]) if name_data_value[5] > 0 and
+        'Numero Operacoes Perdas': (name_data_value[5] - name_data_value[4]) if name_data_value[5] > 0 and
                                                                                 name_data_value[4] >= 0 else 0,
         'Evolucao Banca': name_data_value[9],
         'Media Ganhos': sum(name_data_value[6]) / len(name_data_value[6]) if len(name_data_value[6]) > 0 else 0,
