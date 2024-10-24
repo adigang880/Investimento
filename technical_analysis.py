@@ -204,7 +204,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
     media_ganhos = []
     media_perdas = []
     media_dias = []
-    evolucao_banca = [banca_inicial, start_date]
+    evolucao_banca = [[banca_inicial, start_date]]
     banca_atual = banca_inicial
 
     # Itera sobre os dados para verificar as condições
@@ -488,7 +488,7 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
         'Ativo': name,
         'Data Inicio': start_date,
         'Data Final': end_date,
-        'Dados Historico': df,
+        'Dados Historico': df.to_dict(orient='records'),
         'Banca Inicial': banca_inicial,
         'Banca Final': banca_final,
         'Lucro Perda': total_profit,

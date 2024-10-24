@@ -5,13 +5,14 @@ import plotly.graph_objs as go
 import json
 import yfinance as yf
 import datetime as dt
-
+import ast
 
 # Carregar dados do arquivo JSON
 with open('dados_ativos.json', 'r') as f:
     data_json = [json.loads(line) for line in f]
 
 data = pd.DataFrame(data_json)
+
 # Inicializando o aplicativo Dash
 app = dash.Dash(__name__)
 
@@ -31,7 +32,6 @@ def buscar_dados_por_ativo(nome_ativo):
         if dados_ativo['Ativo'] == nome_ativo:
             return dados_ativo  # Retorna os dados do ativo encontrado
     return None  # Retorna None se o ativo não for encontrado
-
 
 # Layout do dashboard
 app.layout = html.Div([
@@ -57,7 +57,6 @@ app.layout = html.Div([
     html.Div(id='div-resumo', style={'width': '100%'})
 ])
 
-
 # Callback para atualizar os gráficos com base no ativo selecionado
 @app.callback(
     [Output('div-graficos', 'children'),
@@ -77,8 +76,11 @@ def update_dashboard(n_clicks, ativo_selecionado):
         return [], [html.Div("Nenhum dado encontrado para este ativo.")]
 
     tiker_name = dados_ativo["Ativo"]+'.SA'
-    df = yf.download(tiker_name, start=dados_ativo['Data Inicio'], end=dados_ativo['Data Final'])
-    cotacao_atual = df['Close'].iloc[-1] if not df.empty else None
+    df = yf.download(tiker_name, start=dados_ativo['Data Inicio'], end = dt.datetime.today().strftime('%Y-%m-%d'))
+
+    dtd = yf.Ticker(tiker_name)
+    cotacao_atual = dtd.history(period='1d')
+    cotacao_atual = cotacao_atual['Close'][0]
 
     # Sinais de compra, venda, short e cover
     buy_signals = dados_ativo.get('Sinais de Compra', [])
@@ -88,14 +90,9 @@ def update_dashboard(n_clicks, ativo_selecionado):
     buy_open = dados_ativo.get('Entrada Aberta Compra', [])
     sell_open = dados_ativo.get('Entrada Aberta Venda Descoberto', [])
 
-    # Gráfico da evolução da banca
-    evolucao_banca_dados = dados_ativo["Evolucao Banca"]
-    # Preparar listas para os valores de Y e X
-    y_values = [evolucao_banca_dados[0]]  # Inicia com o primeiro valor (1000)
-    x_values = [evolucao_banca_dados[1]]  # A primeira data
-    for evolucao in evolucao_banca_dados[2:]:  # Começa da terceira posição
-        y_values.append(evolucao[0])  # Extraindo os valores
-        x_values.append(evolucao[1])  # Extraindo as datas
+    evolucao_banca = dados_ativo['Evolucao Banca']
+    y_values = [item[0] for item in evolucao_banca]
+    x_values = [item[1] for item in evolucao_banca]
 
     # Gráfico de Candle
     data = [
@@ -206,10 +203,6 @@ def update_dashboard(n_clicks, ativo_selecionado):
         }
     )
 
-    #######################################################################################
-
-
-    #######################################################################################
     # Colocando os gráficos de candle e evolução da banca lado a lado
     div_graficos = html.Div([
         html.Div(candlestick, style={'flex': '1', 'marginRight': '10px'}),
