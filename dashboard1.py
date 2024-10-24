@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objs as go
 import json
 import yfinance as yf
+import datetime as dt
 
 
 # Carregar dados do arquivo JSON
@@ -15,8 +16,8 @@ data = pd.DataFrame(data_json)
 app = dash.Dash(__name__)
 
 # Data fixa para os gráficos
-DATA_INICIO = '2023-01-01'
-DATA_FIM = '2023-12-31'
+DATA_INICIO = '2022-01-01'
+DATA_FIM = dt.datetime.now().strftime('%Y-%m-%d')
 
 # Lista de ações disponíveis
 acoes_disponiveis = data['Ativo']
@@ -33,7 +34,9 @@ def buscar_dados_por_ativo(nome_ativo):
 
 
 dados_ativo = buscar_dados_por_ativo(acoes_disponiveis[0])
+dados_ativo1 = pd.DataFrame(dados_ativo['Dados Historico'])
 
+x=1
 # Layout do dashboard
 app.layout = html.Div([
     html.H1("Dashboard de Desempenho do Investimento"),
@@ -81,28 +84,13 @@ def update_dashboard(n_clicks, ativo_selecionado):
     df = yf.download(tiker_name, start=dados_ativo['Data Inicio'], end=dados_ativo['Data Final'])
     cotacao_atual = df['Close'].iloc[-1] if not df.empty else None
 
-    # Gráfico de Candle
-    candlestick = dcc.Graph(
-        id='grafico-candlestick',
-        figure={
-            'data': [
-                go.Candlestick(
-                    x=df.index,
-                    open=df['Open'],
-                    high=df['High'],
-                    low=df['Low'],
-                    close=df['Close'],
-                    name='Candle'
-                )
-            ],
-            'layout': go.Layout(
-                title=f'Gráfico de Candle para {dados_ativo["Ativo"]}',
-                xaxis={'title': 'Data'},
-                yaxis={'title': 'Preço'},
-                hovermode='closest'
-            )
-        }
-    )
+    # Sinais de compra, venda, short e cover
+    buy_signals = dados_ativo.get('Sinais Compra', [])
+    sell_signals = dados_ativo.get('Sinais Venda', [])
+    short_signals = dados_ativo.get('Sinais de Venda Descoberto', [])
+    cover_signals = dados_ativo.get('Sinais de Compra Venda Descoberta', [])
+    buy_open = dados_ativo.get('Entrada Aberta Compra', [])
+    sell_open = dados_ativo.get('Entrada Aberta Venda Descoberto', [])
 
     # Gráfico da evolução da banca
     evolucao_banca_dados = dados_ativo["Evolucao Banca"]
@@ -112,6 +100,66 @@ def update_dashboard(n_clicks, ativo_selecionado):
     for evolucao in evolucao_banca_dados[2:]:  # Começa da terceira posição
         y_values.append(evolucao[0])  # Extraindo os valores
         x_values.append(evolucao[1])  # Extraindo as datas
+
+    candlestick = dcc.Graph(
+        id='grafico-banca',
+        figure={
+            'data': [
+                # Evolução da banca
+                go.Candlestick(
+                    x=df.index,
+                    open=df['Open'],
+                    high=df['High'],
+                    low=df['Low'],
+                    close=df['Close'],
+                    name='Candle'
+                ),
+                # Adicionando os sinais de compra (buy_signals)
+                go.Scatter(
+                    x=[signal[0] for signal in buy_signals],
+                    y=[signal[1] for signal in buy_signals],
+                    mode='markers',
+                    name='Compras',
+                    marker=dict(symbol='triangle-up', color='green', size=10),
+                    showlegend=True
+                ),
+                # Adicionando os sinais de venda (sell_signals)
+                go.Scatter(
+                    x=[signal[0] for signal in sell_signals],
+                    y=[signal[1] for signal in sell_signals],
+                    mode='markers',
+                    name='Vendas',
+                    marker=dict(symbol='triangle-down', color='red', size=10),
+                    showlegend=True
+                ),
+                # Adicionando sinais de short (short_signals)
+                go.Scatter(
+                    x=[signal[0] for signal in short_signals],
+                    y=[signal[1] for signal in short_signals],
+                    mode='markers',
+                    name='Venda Descoberta',
+                    marker=dict(symbol='triangle-down', color='black', size=10),
+                    showlegend=True
+                ),
+                # Adicionando sinais de cover (cover_signals)
+                go.Scatter(
+                    x=[signal[0] for signal in cover_signals],
+                    y=[signal[1] for signal in cover_signals],
+                    mode='markers',
+                    name='Compra Descoberta',
+                    marker=dict(symbol='triangle-up', color='blue', size=10),
+                    showlegend=True
+                )
+            ],
+            
+            'layout': go.Layout(
+                title=f'Gráfico de Candle para {dados_ativo["Ativo"]}',
+                xaxis={'title': 'Data'},
+                yaxis={'title': 'Preço'},
+                hovermode='closest'
+            )
+        }
+    )
 
     evolucao_banca = dcc.Graph(
         id='grafico-banca',
