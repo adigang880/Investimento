@@ -46,7 +46,7 @@ app.layout = html.Div([
         options=[{'label': acao, 'value': acao} for acao in acoes_disponiveis],
         value='CPLE6',  # Valor padrão
         multi=False,  # Permite apenas uma seleção
-        style={'width': '200px', 'fontSize': '16px'} # Ajuste a largura e o tamanho da fonte
+        style={'width': '200px', 'fontSize': '16px'}  # Ajuste a largura e o tamanho da fonte
     ),
 
     html.Button('Atualizar Gráficos', id='botao-atualizar', n_clicks=0),
@@ -177,7 +177,7 @@ def update_dashboard(n_clicks, ativo_selecionado):
         figure={
             'data': data,
             'layout': go.Layout(
-                title=f'Gráfico de Candle para {dados_ativo["Ativo"]}',
+                title=f'{dados_ativo["Ativo"]}',
                 xaxis={'title': 'Data'},
                 yaxis={'title': 'Preço'},
                 hovermode='closest'
@@ -198,7 +198,7 @@ def update_dashboard(n_clicks, ativo_selecionado):
                 )
             ],
             'layout': go.Layout(
-                title=f'Evolução da Banca para {dados_ativo["Ativo"]}',
+                title=f'Evolução da Banca - {dados_ativo["Ativo"]}',
                 xaxis={'title': 'Data'},
                 yaxis={'title': 'Banca (R$)'},
                 hovermode='closest'
@@ -206,6 +206,10 @@ def update_dashboard(n_clicks, ativo_selecionado):
         }
     )
 
+    #######################################################################################
+
+
+    #######################################################################################
     # Colocando os gráficos de candle e evolução da banca lado a lado
     div_graficos = html.Div([
         html.Div(candlestick, style={'flex': '1', 'marginRight': '10px'}),
@@ -319,7 +323,7 @@ def update_dashboard(n_clicks, ativo_selecionado):
 [html.Div(resumo_geral + resumo_adicional, style={'display': 'flex', 'flexDirection': 'row', 'flexWrap': 'wrap',
                                           'justifyContent': 'space-around'}),
         html.Div(resumo_adicional_1 + resumo_adicional_2, style={'display': 'flex', 'flexDirection': 'row', 'flexWrap': 'wrap',
-                                                'justifyContent': 'space-around'}),
+                                                'justifyContent': 'space-around'})
         ],
         style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}
         # Centraliza os elementos
