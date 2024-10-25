@@ -44,8 +44,6 @@ df_filtered = df[df['Ativo'] == ativo]
 #Lucro_por_entrada_venda_descoberto = df_filtered['Lucro/Perda Por Entrada Venda Descoberto'].iloc[0]
 #Lucro_por_entrada_compra = df_filtered['Lucro/Perda Por Entrada Compra'].iloc[0]
 
-data_str, valor_str = df_filtered['Entrada Aberta Compra'][0].split(", ")
-
 if not df_filtered.empty:
     # Cria um índice de datas baseado em 'Data Inicio' e 'Data Final'
     data_inicio = df_filtered['Data Inicio'].iloc[0].date()  # Extrai apenas a parte da data
@@ -75,12 +73,17 @@ if not df_filtered.empty:
     data_inicio_new = ''
     valor_str = ''
 
-    if not df_filtered['Entrada Aberta Compra'].empty and df_filtered['Entrada Aberta Compra'].iloc[0]:
-        name = 'Entrada em Aberto de Compra'
-        data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'][0].split(", ")
-    elif not df_filtered['Entrada Aberta Venda Descoberto'].empty and df_filtered['Entrada Aberta Venda Descoberto'].iloc[0]:
-        name = 'Entrada em Aberto de Venda a Descoberto'
-        data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'][0].split(", ")
+    if 'Entrada Aberta Compra' in df_filtered.columns and not df_filtered['Entrada Aberta Compra'].isna().all():
+        if df_filtered['Entrada Aberta Compra'].iloc[0]:  # Verificar se o primeiro valor não é vazio
+            name = 'Entrada em Aberto de Compra'
+            data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'].iloc[0].split(", ")
+
+    # Verificar se 'Entrada Aberta Venda Descoberto' tem dados e extrair se sim
+    if 'Entrada Aberta Venda Descoberto' in df_filtered.columns and not df_filtered[
+        'Entrada Aberta Venda Descoberto'].isna().all():
+        if df_filtered['Entrada Aberta Venda Descoberto'].iloc[0]:  # Verificar se o primeiro valor não é vazio
+            name = 'Entrada em Aberto de Venda a Descoberto'
+            data_inicio_new, valor_str = df_filtered['Entrada Aberta Venda Descoberto'].iloc[0].split(", ")
 
     # Exibir as informações no sidebar dentro de um bloco com borda
     st.sidebar.markdown(
