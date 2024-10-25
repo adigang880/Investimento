@@ -40,7 +40,59 @@ ativo = st.sidebar.selectbox('Ativo', df['Ativo'])
 
 # Cria filtro dos ativo
 df_filtered = df[df['Ativo'] == ativo]
+
+#Lucro_por_entrada_venda_descoberto = df_filtered['Lucro/Perda Por Entrada Venda Descoberto'].iloc[0]
+#Lucro_por_entrada_compra = df_filtered['Lucro/Perda Por Entrada Compra'].iloc[0]
+
+data_str, valor_str = df_filtered['Entrada Aberta Compra'][0].split(", ")
+
 if not df_filtered.empty:
+    # Cria um índice de datas baseado em 'Data Inicio' e 'Data Final'
+    data_inicio = df_filtered['Data Inicio'].iloc[0].date()  # Extrai apenas a parte da data
+    data_inicio_str = data_inicio.strftime('%Y-%m-%d')  # Formato de data
+    end_date = dt.datetime.now().strftime('%Y-%m-%d')
+
+    # Blocos de Resumo na barra lateral
+    dtd = yf.Ticker(ativo + '.SA')
+    cotacao_atual = dtd.history(period='1d')
+    cotacao_atual = cotacao_atual['Close'].iloc[0]
+    st.sidebar.markdown(f"**Cotação Atual:** {cotacao_atual:.2f}")
+    st.sidebar.markdown(f"**Data de Inicio:** {data_inicio_str}")
+    st.sidebar.markdown(f"**Data Final:** {end_date}")
+    st.sidebar.markdown(f"**Banca Inicial:** R$ {df_filtered['Banca Inicial'].iloc[0]:.2f}")
+    st.sidebar.markdown(f"**Banca Final:** R$ {df_filtered['Banca Final'].iloc[0]:.2f}")
+    st.sidebar.markdown(f"**Lucro/Perda Total:** R$ {df_filtered['Lucro Perda'].iloc[0]:.2f}")
+    st.sidebar.markdown(f"**Número Total de Operações:** {df_filtered['Numero Operacoes'].iloc[0]}")
+    st.sidebar.markdown(f"**Número de Operações Ganhas:** {df_filtered['Numero Operacoes Ganhas'].iloc[0]}")
+    st.sidebar.markdown(f"**Número de Operações Perdidas:** {df_filtered['Numero Operacoes'].iloc[0] - df_filtered['Numero Operacoes Ganhas'].iloc[0]}")
+    st.sidebar.markdown(f"**Porcentagem de Acerto:** {df_filtered['Porcentagem Acerto'].iloc[0] * 100:.2f}%")
+    st.sidebar.markdown(f"**Média de Ganhos:** {df_filtered['Media Ganhos'].iloc[0]:.2f}")
+    st.sidebar.markdown(f"**Média de Perdas:** {df_filtered['Media Perdas'].iloc[0]:.2f}")
+    st.sidebar.markdown(f"**Média de Dias Operações:** {df_filtered['Media Dias Operacao'].iloc[0]:.0f}")
+    st.sidebar.markdown(f"**Total de Dias Passados:** {df_filtered['Total Dias Passados'].iloc[0]:.0f}")
+
+    name = 'Sem Entrada em Aberto'
+    data_inicio_new = ''
+    valor_str = ''
+
+    if not df_filtered['Entrada Aberta Compra'].empty and df_filtered['Entrada Aberta Compra'].iloc[0]:
+        name = 'Entrada em Aberto de Compra'
+        data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'][0].split(", ")
+    elif not df_filtered['Entrada Aberta Venda Descoberto'].empty and df_filtered['Entrada Aberta Venda Descoberto'].iloc[0]:
+        name = 'Entrada em Aberto de Venda a Descoberto'
+        data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'][0].split(", ")
+
+    # Exibir as informações no sidebar dentro de um bloco com borda
+    st.sidebar.markdown(
+        f"""
+        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+            <p><strong>{name}</strong></p>
+            <p><strong>Data:</strong> {data_inicio_new}</p>
+            <p><strong>Valor:</strong> {valor_str}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     dados_historico = df_filtered['Dados Historico'].iloc[0]
     if dados_historico:
@@ -105,7 +157,6 @@ if not df_filtered.empty:
                 # Verifica se dff e x_values/y_values têm dados
                 if not dff.empty and y_values and x_values:
                     # Dados para os gráficos de Candle e Evolução da Banca
-                    # Gráfico de Candlestick
                     # Gráfico de Candlestick
                     data = [
                         go.Candlestick(
@@ -211,5 +262,3 @@ if not df_filtered.empty:
         st.warning(f"Nenhum dado histórico encontrado para o ativo {ativo}.")
 else:
     st.warning("Nenhum ativo selecionado ou não há dados disponíveis para o ativo selecionado.")
-
-col3, col4, col5 = st.columns(3)

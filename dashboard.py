@@ -236,5 +236,3 @@ if not df_filtered.empty:
         st.warning(f"Nenhum dado histórico encontrado para o ativo {ativo}.")
 else:
     st.warning("Nenhum ativo selecionado ou não há dados disponíveis para o ativo selecionado.")
-
-col3, col4, col5 = st.columns(3)
