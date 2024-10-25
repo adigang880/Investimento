@@ -46,8 +46,13 @@ if not df_filtered.empty:
     if dados_historico:
         # Cria um DataFrame a partir dos dados históricos
         try:
-            dff = pd.DataFrame(dados_historico)
-            #st.write(f"Dados históricos para {ativo}:", dff)  # Exibir dados para depuração
+            # Cria um índice de datas baseado em 'Data Inicio' e 'Data Final'
+            data_inicio = df_filtered['Data Inicio'].iloc[0].date()  # Extrai apenas a parte da data
+            data_inicio_str = data_inicio.strftime('%Y-%m-%d')  # Formato de data
+            end_date = dt.datetime.now().strftime('%Y-%m-%d')
+            ticker = ativo + '.SA'  # Exemplo para ação da Azul (B3)
+            dff = yf.download(ticker, start=data_inicio_str, end=end_date)
+
 
             # Verifica se as colunas necessárias estão presentes
             required_columns = ['Open', 'High', 'Low', 'Close']
@@ -58,22 +63,118 @@ if not df_filtered.empty:
                 y_values = [item[0] for item in data_list]
                 x_values = [item[1] for item in data_list]
 
+                # Função para obter sinais com tratamento de erro
+                # Função para obter sinais com tratamento de erro
+                def get_signals(column):
+                    try:
+                        signals = ast.literal_eval(df_filtered[column].iloc[0])
+                        # Converter as datas dos sinais para datetime se forem strings
+                        if signals:
+                            for i in range(len(signals)):
+                                if isinstance(signals[i][0], str):  # Verifica se a data é uma string
+                                    signals[i][0] = pd.to_datetime(signals[i][0])  # Converte para datetime
+                        return signals
+                    except (ValueError, SyntaxError):
+                        return []  # Retorna uma lista vazia se houver erro
+
+                # Obtendo sinais de compra e venda
+                buy_signals = get_signals('Sinais de Compra')
+                sell_signals = get_signals('Sinais de Venda')
+                short_signals = get_signals('Sinais de Venda Descoberto')
+                cover_signals = get_signals('Sinais de Compra Venda Descoberta')
+                buy_openn = df_filtered['Entrada Aberta Compra'].iloc[0]
+                sell_openn = df_filtered['Entrada Aberta Venda Descoberto'].iloc[0]
+
+                buy_open = []
+                sell_open = []
+                try:
+                    data_str, valor_str = buy_openn.split(", ")
+                    data = dt.datetime.strptime(data_str, '%Y-%m-%d')  # Converte a string para formato datetime
+                    valor = float(valor_str)
+                    buy_open = [data, valor]
+                except:
+                    pass
+                try:
+                    data_str, valor_str = sell_openn.split(", ")
+                    data = dt.datetime.strptime(data_str, '%Y-%m-%d')  # Converte a string para formato datetime
+                    valor = float(valor_str)
+                    sell_open = [data, valor]
+                except:
+                    pass
+
                 # Verifica se dff e x_values/y_values têm dados
                 if not dff.empty and y_values and x_values:
                     # Dados para os gráficos de Candle e Evolução da Banca
                     # Gráfico de Candlestick
-                    fig_candle = go.Figure(data=[
+                    # Gráfico de Candlestick
+                    data = [
                         go.Candlestick(
-                        x=dff.index,
-                        open=dff['Open'],
-                        high=dff['High'],
-                        low=dff['Low'],
-                        close=dff['Close'],
-                        name='Candle'
+                            x=dff.index,
+                            open=dff['Open'],
+                            high=dff['High'],
+                            low=dff['Low'],
+                            close=dff['Close'],
+                            name='Candle'
+                        ),
+                        # Adicionando os sinais de compra (buy_signals)
+                        go.Scatter(
+                            x=[signal[0] for signal in buy_signals],
+                            y=[signal[1] for signal in buy_signals],
+                            mode='markers',
+                            name='Compras',
+                            marker=dict(symbol='triangle-up', color='green', size=15),
+                            showlegend=True
+                        ),
+                        # Adicionando os sinais de venda (sell_signals)
+                        go.Scatter(
+                            x=[signal[0] for signal in sell_signals],
+                            y=[signal[1] for signal in sell_signals],
+                            mode='markers',
+                            name='Vendas',
+                            marker=dict(symbol='triangle-down', color='red', size=15),
+                            showlegend=True
+                        ),
+                        # Adicionando sinais de short (short_signals)
+                        go.Scatter(
+                            x=[signal[0] for signal in short_signals],
+                            y=[signal[1] for signal in short_signals],
+                            mode='markers',
+                            name='Venda Descoberta',
+                            marker=dict(symbol='triangle-down', color='black', size=10),
+                            showlegend=True
+                        ),
+                        # Adicionando sinais de cover (cover_signals)
+                        go.Scatter(
+                            x=[signal[0] for signal in cover_signals],
+                            y=[signal[1] for signal in cover_signals],
+                            mode='markers',
+                            name='Compra Descoberta',
+                            marker=dict(symbol='triangle-up', color='blue', size=10),
+                            showlegend=True
+                        ),
+                        # Adicionando sinais de abertura de compra
+                        go.Scatter(
+                            x=[buy_open[0]] if len(buy_open) > 1 else [],
+                            y=[buy_open[1]] if len(buy_open) > 1 else [],
+                            mode='markers',
+                            marker=dict(symbol='star', color='green', size=15),
+                            name='Abertura de Compra'
+                        ),
+                        # Adicionando sinais de abertura de venda
+                        go.Scatter(
+                            x=[sell_open[0]] if len(sell_open) > 1 else [],
+                            y=[sell_open[1]] if len(sell_open) > 1 else [],
+                            mode='markers',
+                            marker=dict(symbol='star', color='red', size=15),
+                            name='Abertura de Venda'
                         )
-                    ])
+                    ]
+                    # Cria o gráfico
+                    fig_candle = go.Figure(data=data)
+
+                    # Atualiza layout
                     fig_candle.update_layout(
-                        title=f'Ativo {ativo} - Gráfico Candlestick',
+                        title=f'Entradas',
                         xaxis_title='Data',
                         yaxis_title='Preço',
                         hovermode='closest'
@@ -91,7 +192,7 @@ if not df_filtered.empty:
                         )
                     ])
                     fig_banca.update_layout(
-                        title=f'Evolução da Banca - {ativo}',
+                        title=f'Evolução da Banca',
                         xaxis_title='Data',
                         yaxis_title='Banca (R$)',
                         hovermode='closest'
