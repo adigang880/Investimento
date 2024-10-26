@@ -116,7 +116,7 @@ if not df_filtered.empty:
         st.write("### Operações Finalizadas Compra")
 
         # Dividir operações em grupos de 7 blocos
-        chunk_size = 4
+        chunk_size = 6
         for i in range(0, len(Lucro_por_entrada_compra), chunk_size):
             colunas = st.columns(chunk_size)
             for idx, operacao in enumerate(Lucro_por_entrada_compra[i:i + chunk_size]):
@@ -129,9 +129,9 @@ if not df_filtered.empty:
                             border: 2px solid {borda}; 
                             padding: 2px; 
                             font-size: 16px;
-                            border-radius: 5px; 
+                            border-radius: 10px; 
                             text-align: center; 
-                            margin-bottom: 2px;
+                            margin-bottom: 8px;
                         ">
                             <strong>Entrada:</strong> {Lucro_por_entrada_compra[idx]['Entrada']} | 
                             <strong> R$</strong> {Lucro_por_entrada_compra[idx]['Valor Entrada']}<br>
@@ -157,7 +157,7 @@ if not df_filtered.empty:
         st.write("### Operações Finalizadas Venda Descoberta")
 
         # Dividir operações em grupos de 7 blocos
-        chunk_size = 4
+        chunk_size = 6
         for i in range(0, len(Lucro_por_entrada_venda_descoberto), chunk_size):
             colunas = st.columns(chunk_size)
             for idx, operacao in enumerate(Lucro_por_entrada_venda_descoberto[i:i + chunk_size]):
@@ -170,9 +170,9 @@ if not df_filtered.empty:
                         border: 2px solid {borda}; 
                         padding: 2px; 
                         font-size: 16px;
-                        border-radius: 5px; 
+                        border-radius: 10px; 
                         text-align: center; 
-                        margin-bottom: 2px;
+                        margin-bottom: 8px;
                     ">
                         <strong>Entrada:</strong> {Lucro_por_entrada_venda_descoberto[idx]['Entrada']} | 
                         <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx]['Valor Entrada']}<br>
