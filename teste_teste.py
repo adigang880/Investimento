@@ -41,10 +41,10 @@ ativo = st.sidebar.selectbox('Ativo', df['Ativo'])
 # Cria filtro dos ativo
 df_filtered = df[df['Ativo'] == ativo]
 
-#Lucro_por_entrada_venda_descoberto = df_filtered['Lucro/Perda Por Entrada Venda Descoberto'].iloc[0]
-#Lucro_por_entrada_compra = df_filtered['Lucro/Perda Por Entrada Compra'].iloc[0]
 
 if not df_filtered.empty:
+
+    ###########################################################################################################
     # Cria um índice de datas baseado em 'Data Inicio' e 'Data Final'
     data_inicio = df_filtered['Data Inicio'].iloc[0].date()  # Extrai apenas a parte da data
     data_inicio_str = data_inicio.strftime('%Y-%m-%d')  # Formato de data
@@ -88,7 +88,14 @@ if not df_filtered.empty:
     # Exibir as informações no sidebar dentro de um bloco com borda
     st.sidebar.markdown(
         f"""
-        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+        <style>
+            @keyframes blink {{
+                0% {{ border-color: yellow; }}
+                50% {{ border-color: transparent; }}
+                200% {{ border-color: yellow; }}
+            }}
+        </style>
+        <div style="border: 3px solid yellow; padding: 2px; border-radius: 5px; animation: blink 1s infinite;">
             <p><strong>{name}</strong></p>
             <p><strong>Data:</strong> {data_inicio_new}</p>
             <p><strong>Valor:</strong> {valor_str}</p>
@@ -96,7 +103,88 @@ if not df_filtered.empty:
         """,
         unsafe_allow_html=True
     )
+    ###########################################################################################################
+    Lucro_por_entrada_compra = df_filtered['Lucro/Perda Por Entrada Compra'].iloc[0]
 
+    # Função para definir a cor da borda com base no lucro ou perda
+    def define_borda(lucro_perda):
+        return "green" if lucro_perda > 0 else "red"
+
+
+    if Lucro_por_entrada_compra:
+        # Layout para exibir os blocos de operações
+        st.write("### Operações Finalizadas Compra")
+
+        # Dividir operações em grupos de 7 blocos
+        chunk_size = 4
+        for i in range(0, len(Lucro_por_entrada_compra), chunk_size):
+            colunas = st.columns(chunk_size)
+            for idx, operacao in enumerate(Lucro_por_entrada_compra[i:i + chunk_size]):
+                borda = define_borda(Lucro_por_entrada_compra[idx]['Lucro Perda'])
+
+                # Usando HTML para estilizar cada bloco individualmente
+                colunas[idx].markdown(
+                    f"""
+                        <div style="
+                            border: 2px solid {borda}; 
+                            padding: 2px; 
+                            font-size: 16px;
+                            border-radius: 5px; 
+                            text-align: center; 
+                            margin-bottom: 2px;
+                        ">
+                            <strong>Entrada:</strong> {Lucro_por_entrada_compra[idx]['Entrada']} | 
+                            <strong> R$</strong> {Lucro_por_entrada_compra[idx]['Valor Entrada']}<br>
+                            <strong>Saída:</strong> {Lucro_por_entrada_compra[idx]['Saida']} | 
+                            <strong> R$</strong> {Lucro_por_entrada_compra[idx]['Valor Saida']}<br>
+                            <strong>Lucro/Perda:</strong> {'+' if Lucro_por_entrada_compra[idx]['Lucro Perda'] > 0
+                    else ''}{Lucro_por_entrada_compra[idx]['Lucro Perda']:.2f}
+                        </div>
+                        """,
+                    unsafe_allow_html=True
+                )
+    ###########################################################################################################
+    # Dados das operações
+    Lucro_por_entrada_venda_descoberto = df_filtered['Lucro/Perda Por Entrada Venda Descoberto'].iloc[0]
+
+    # Função para definir a cor da borda com base no lucro ou perda
+    def define_borda(lucro_perda):
+        return "green" if lucro_perda > 0 else "red"
+
+
+    if Lucro_por_entrada_venda_descoberto:
+        # Layout para exibir os blocos de operações
+        st.write("### Operações Finalizadas Venda Descoberta")
+
+        # Dividir operações em grupos de 7 blocos
+        chunk_size = 4
+        for i in range(0, len(Lucro_por_entrada_venda_descoberto), chunk_size):
+            colunas = st.columns(chunk_size)
+            for idx, operacao in enumerate(Lucro_por_entrada_venda_descoberto[i:i + chunk_size]):
+                borda = define_borda(Lucro_por_entrada_venda_descoberto[idx]['Lucro Perda'])
+
+                # Usando HTML para estilizar cada bloco individualmente
+                colunas[idx].markdown(
+                    f"""
+                    <div style="
+                        border: 2px solid {borda}; 
+                        padding: 2px; 
+                        font-size: 16px;
+                        border-radius: 5px; 
+                        text-align: center; 
+                        margin-bottom: 2px;
+                    ">
+                        <strong>Entrada:</strong> {Lucro_por_entrada_venda_descoberto[idx]['Entrada']} | 
+                        <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx]['Valor Entrada']}<br>
+                        <strong>Saída:</strong> {Lucro_por_entrada_venda_descoberto[idx]['Saida']} | 
+                        <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx]['Valor Saida']}<br>
+                        <strong>Lucro/Perda:</strong> {'+' if Lucro_por_entrada_venda_descoberto[idx]['Lucro Perda'] > 0 
+                    else ''}{Lucro_por_entrada_venda_descoberto[idx]['Lucro Perda']:.2f}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+    ###########################################################################################################
     dados_historico = df_filtered['Dados Historico'].iloc[0]
     if dados_historico:
         # Cria um DataFrame a partir dos dados históricos
@@ -263,5 +351,6 @@ if not df_filtered.empty:
             st.error(f"Erro ao processar dados para {ativo}: {e}")
     else:
         st.warning(f"Nenhum dado histórico encontrado para o ativo {ativo}.")
+    ###########################################################################################################
 else:
     st.warning("Nenhum ativo selecionado ou não há dados disponíveis para o ativo selecionado.")
