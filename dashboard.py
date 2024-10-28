@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objs as go
 import json
-import numpy as np
 import datetime as dt
 import yfinance as yf
 import ast
