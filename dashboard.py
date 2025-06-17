@@ -6,6 +6,7 @@ import datetime as dt
 import yfinance as yf
 import ast
 
+# EXECUTAR  streamlit run dashboard.py
 # ocupar a pagina toda
 st.set_page_config(layout='wide')
 

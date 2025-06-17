@@ -61,7 +61,7 @@ def calculate_macd(data, fast_period=12, slow_period=26, signal_period=9):
 
 
 # Função para calcular o RSI
-def calculate_rsi(data, period=14):
+def calculate_rsi(data, period=10):
     delta = data['Close'].diff()
     gain = delta.where(delta > 0, 0)
     loss = -delta.where(delta < 0, 0)
@@ -187,7 +187,7 @@ plot_indicators(data)
 '''
 
 
-def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, start_date, rsi_threshold=20,
+def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, start_date, rsi_threshold=35,
                      stop_loss_percent=0.05):
     buy_signals = []
     sell_signals = []
@@ -269,7 +269,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
 
                 continue  # Move para a próxima iteração após o stop loss
 
-            sell_condition = (use_rsi and current_rsi > 70)
+            sell_condition = (use_rsi and current_rsi > 65)
             macd_condition_sell = (use_macd and current_macd > current_signal)
 
             # Condição extra de venda usando Stochastic
@@ -313,7 +313,7 @@ def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use
         # **Venda Descoberta** (short selling) - Vender antes de comprar
         if position is None:
             short_condition = (
-                        use_rsi and current_rsi > 70)  # Condição para iniciar uma venda descoberta (RSI alto)
+                        use_rsi and current_rsi > 65)  # Condição para iniciar uma venda descoberta (RSI alto)
 
             macd_condition_short = (use_macd and current_macd > current_signal)
 
