@@ -1,7 +1,6 @@
 # ifr https://www.youtube.com/watch?v=hmTOQbgpGJA&pp=ygUNaW5kaWNhZG9yIGlmcg%3D%3D divergencia
 # https://www.youtube.com/watch?v=J4F09C3EnWs
 # https://www.youtube.com/watch?v=m2kGFXWghTU&t=9s semanal e diario
-import pandas as pd
 # macd https://www.youtube.com/watch?v=6htExpkRL5w
 # estocastico lento  https://www.youtube.com/watch?v=6zDREMYERmI
 # Volume
@@ -9,12 +8,13 @@ import pandas as pd
 # true range para colcoar com metica na volatilidade acima
 # testar aestrategia do trezoitão se um ativo desvia 2x o desvio padrão ver se pode comprar ou vender aquele ativo, ver a taxa de acetividade disso e o lucro ou perda
 
-
 import yfinance as yf
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime as dt
 import time
+import pandas as pd
+
 
 ###################################################################################################
 
