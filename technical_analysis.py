@@ -76,9 +76,9 @@ def calculate_rsi(data, period=10):
 
 
 # Função para calcular o Estocástico Lento
-def calculate_stochastic(data, k_period=14, d_period=3):
-    data['L14'] = data['Low'].rolling(window=k_period).min()
-    data['H14'] = data['High'].rolling(window=k_period).max()
+def calculate_stochastic(data, ticker, k_period=14, d_period=3):
+    data[('L14', ticker)] = data['Low'].rolling(window=k_period).min()
+    data[('H14', ticker)] = data['High'].rolling(window=k_period).max()
     data['%K'] = 100 * ((data['Close'] - data['L14']) / (data['H14'] - data['L14']))
     data['%D'] = data['%K'].rolling(window=d_period).mean()
     return data
@@ -470,7 +470,7 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
     df = yf.download(ticker, start=start_date, end=end_date)
     data = calculate_macd(df)
     data = calculate_rsi(df)
-    data = calculate_stochastic(df)
+    data = calculate_stochastic(df, ticker)
     data = calculate_volume_oscillator(df)
     data = calculate_atr(df)
     data = calculate_volume_delta_ewm(df)

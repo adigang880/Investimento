@@ -183,4 +183,4 @@ def fundamentalist_filters(data, use_defaults):
     df_acao = process_data(data)
     df2 = filter_dataframe(df_acao, use_defaults)
 
-    return df2
+    return df2.reset_index(drop=True)
