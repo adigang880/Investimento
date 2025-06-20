@@ -187,8 +187,8 @@ plot_indicators(data)
 '''
 
 
-def trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, start_date, rsi_threshold=35,
-                     stop_loss_percent=0.05):
+def trading_strategy(data, banca_inicial, ticker, use_rsi, use_macd, use_stochastic, use_atr, start_date,
+                     rsi_threshold=35, stop_loss_percent=0.05):
     buy_signals = []
     sell_signals = []
     position = None  # Rastreamos a posição atual ('buy', 'sell', ou None)
@@ -477,7 +477,8 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
     data = calculate_volatility(df, window)
 
     (buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals, value_finish_b,
-     value_finish_v, name_data_value) = trading_strategy(data, banca_inicial, use_rsi, use_macd, use_stochastic, use_atr, start_date)
+     value_finish_v, name_data_value) = trading_strategy(
+        data, banca_inicial, ticker, use_rsi, use_macd, use_stochastic, use_atr, start_date)
 
     start_date_obj = dt.datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = dt.datetime.strptime(end_date, '%Y-%m-%d')
@@ -556,7 +557,8 @@ def metodos(name, banca_inicial, use_rsi=True, use_macd=True, use_stochastic=Fal
 
 '''
 # Usando RSI, MACD, e Stochastic
-buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial, use_stochastic=True)
+buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(
+    data, banca_inicial, ticker, use_stochastic=True)
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
 print("Sinais de Venda:", sell_signals)
@@ -580,7 +582,8 @@ plt.grid()
 plt.show()
 
 # Usando RSI, MACD, ATR, e Stochastic
-buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(data, banca_inicial, use_stochastic=True, use_atr=True)
+buy_signals, sell_signals, total_profit, win_rate, banca_final, short_signals, cover_signals = trading_strategy(
+    data, banca_inicial, ticker, use_stochastic=True, use_atr=True)
 
 # Exibe os resultados
 print("Sinais de Compra:", buy_signals)
