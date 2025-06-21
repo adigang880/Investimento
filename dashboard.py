@@ -195,6 +195,20 @@ if not df_filtered.empty:
             ticker = ativo + '.SA'  # Exemplo para ação da Azul (B3)
             dff = yf.download(ticker, start=data_inicio_str, end=end_date)
 
+            if isinstance(dff.columns[0], tuple):
+                dff.columns = [col[0] for col in dff.columns]
+
+            # Converter colunas para numérico
+            for col in ['Open', 'High', 'Low', 'Close']:
+                dff[col] = pd.to_numeric(dff[col], errors='coerce')
+
+            # Garantir que o índice é datetime
+            if not isinstance(dff.index, pd.DatetimeIndex):
+                dff.index = pd.to_datetime(dff.index)
+
+            # Remover linhas com valores ausentes
+            dff = dff.dropna(subset=['Open', 'High', 'Low', 'Close'])
+
             # Verifica se as colunas necessárias estão presentes
             required_columns = ['Open', 'High', 'Low', 'Close']
             if all(col in dff.columns for col in required_columns):
