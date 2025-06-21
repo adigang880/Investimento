@@ -332,7 +332,6 @@ if not df_filtered.empty:
                     # Cria o gráfico
                     fig_candle = go.Figure(data=fig_data)
 
-
                     # Atualiza layout
                     fig_candle.update_layout(
                         title=f'Entradas',
@@ -343,10 +342,45 @@ if not df_filtered.empty:
 
                     # Evolução da banca (simulada para ilustrar)
                     # Gráfico de Evolução da Banca
+                    # Reorganizar os dados da evolução da banca por tipo
+                    banca_compra = []
+                    banca_venda_descoberto = []
+
+                    for valor, data in data_list:
+                        # Tenta converter a data para datetime (caso não esteja ainda)
+                        try:
+                            dt_data = pd.to_datetime(data)
+                        except:
+                            continue
+
+                        # Verifica se a data está presente nas operações
+                        tem_compra = any(
+                            op['Saida'] == data or op['Entrada'] == data for op in Lucro_por_entrada_compra)
+                        tem_venda = any(
+                            op['Saida'] == data or op['Entrada'] == data for op in Lucro_por_entrada_venda_descoberto)
+
+                        if tem_compra and not tem_venda:
+                            banca_compra.append((dt_data, valor))
+                        elif tem_venda and not tem_compra:
+                            banca_venda_descoberto.append((dt_data, valor))
+
+                    # Define o que vai ser plotado com base no filtro
+                    if tipo_operacao == "Apenas Compras e Vendas":
+                        valores_banca = banca_compra
+                    elif tipo_operacao == "Apenas Venda a Descoberto":
+                        valores_banca = banca_venda_descoberto
+                    else:
+                        valores_banca = [(pd.to_datetime(data), valor) for valor, data in data_list]
+
+                    # Separar os valores finais
+                    x_valores = [item[0] for item in valores_banca]
+                    y_valores = [item[1] for item in valores_banca]
+
+                    # Gráfico da banca
                     fig_banca = go.Figure(data=[
                         go.Scatter(
-                            x=x_values,
-                            y=y_values,
+                            x=x_valores,
+                            y=y_valores,
                             mode='lines+markers',
                             name='Banca (R$)',
                             marker=dict(color='blue')
