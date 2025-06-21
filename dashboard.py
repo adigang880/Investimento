@@ -195,7 +195,6 @@ if not df_filtered.empty:
             ticker = ativo + '.SA'  # Exemplo para ação da Azul (B3)
             dff = yf.download(ticker, start=data_inicio_str, end=end_date)
 
-
             # Verifica se as colunas necessárias estão presentes
             required_columns = ['Open', 'High', 'Low', 'Close']
             if all(col in dff.columns for col in required_columns):
@@ -205,7 +204,6 @@ if not df_filtered.empty:
                 y_values = [item[0] for item in data_list]
                 x_values = [item[1] for item in data_list]
 
-                # Função para obter sinais com tratamento de erro
                 # Função para obter sinais com tratamento de erro
                 def get_signals(column):
                     try:
