@@ -115,7 +115,7 @@ if not df_filtered.empty:
         return "green" if lucro_perda > 0 else "red"
 
 
-    if Lucro_por_entrada_compra:
+    if tipo_operacao in ["Todas as operações", "Apenas Compras e Vendas"] and Lucro_por_entrada_compra:
         # Layout para exibir os blocos de operações
         st.write("### Operações Finalizadas Compra")
 
@@ -156,7 +156,7 @@ if not df_filtered.empty:
         return "green" if lucro_perda > 0 else "red"
 
 
-    if Lucro_por_entrada_venda_descoberto:
+    if tipo_operacao in ["Todas as operações", "Apenas Venda a Descoberto"] and Lucro_por_entrada_venda_descoberto:
         # Layout para exibir os blocos de operações
         st.write("### Operações Finalizadas Venda Descoberta")
 
