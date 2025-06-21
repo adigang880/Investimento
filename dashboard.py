@@ -124,7 +124,7 @@ if not df_filtered.empty:
         for i in range(0, len(Lucro_por_entrada_compra), chunk_size):
             colunas = st.columns(chunk_size)
             for idx, operacao in enumerate(Lucro_por_entrada_compra[i:i + chunk_size]):
-                borda = define_borda(Lucro_por_entrada_compra[idx]['Lucro Perda'])
+                borda = define_borda(Lucro_por_entrada_compra[idx+i]['Lucro Perda'])
 
                 # Usando HTML para estilizar cada bloco individualmente
                 colunas[idx].markdown(
@@ -137,12 +137,12 @@ if not df_filtered.empty:
                             text-align: center; 
                             margin-bottom: 8px;
                         ">
-                            <strong>Entrada:</strong> {Lucro_por_entrada_compra[idx]['Entrada']} | 
-                            <strong> R$</strong> {Lucro_por_entrada_compra[idx]['Valor Entrada']}<br>
-                            <strong>Saída:</strong> {Lucro_por_entrada_compra[idx]['Saida']} | 
-                            <strong> R$</strong> {Lucro_por_entrada_compra[idx]['Valor Saida']}<br>
-                            <strong>Lucro/Perda:</strong> {'+' if Lucro_por_entrada_compra[idx]['Lucro Perda'] > 0
-                    else ''}{Lucro_por_entrada_compra[idx]['Lucro Perda']:.2f}
+                            <strong>Entrada:</strong> {Lucro_por_entrada_compra[idx+i]['Entrada']} | 
+                            <strong> R$</strong> {Lucro_por_entrada_compra[idx+i]['Valor Entrada']}<br>
+                            <strong>Saída:</strong> {Lucro_por_entrada_compra[idx+i]['Saida']} | 
+                            <strong> R$</strong> {Lucro_por_entrada_compra[idx+i]['Valor Saida']}<br>
+                            <strong>Lucro/Perda:</strong> {'+' if Lucro_por_entrada_compra[idx+i]['Lucro Perda'] > 0
+                    else ''}{Lucro_por_entrada_compra[idx+i]['Lucro Perda']:.2f}
                         </div>
                         """,
                     unsafe_allow_html=True
@@ -165,7 +165,7 @@ if not df_filtered.empty:
         for i in range(0, len(Lucro_por_entrada_venda_descoberto), chunk_size):
             colunas = st.columns(chunk_size)
             for idx, operacao in enumerate(Lucro_por_entrada_venda_descoberto[i:i + chunk_size]):
-                borda = define_borda(Lucro_por_entrada_venda_descoberto[idx]['Lucro Perda'])
+                borda = define_borda(Lucro_por_entrada_venda_descoberto[idx+i]['Lucro Perda'])
 
                 # Usando HTML para estilizar cada bloco individualmente
                 colunas[idx].markdown(
@@ -178,12 +178,12 @@ if not df_filtered.empty:
                         text-align: center; 
                         margin-bottom: 8px;
                     ">
-                        <strong>Entrada:</strong> {Lucro_por_entrada_venda_descoberto[idx]['Entrada']} | 
-                        <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx]['Valor Entrada']}<br>
-                        <strong>Saída:</strong> {Lucro_por_entrada_venda_descoberto[idx]['Saida']} | 
-                        <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx]['Valor Saida']}<br>
-                        <strong>Lucro/Perda:</strong> {'+' if Lucro_por_entrada_venda_descoberto[idx]['Lucro Perda'] > 0 
-                    else ''}{Lucro_por_entrada_venda_descoberto[idx]['Lucro Perda']:.2f}
+                        <strong>Entrada:</strong> {Lucro_por_entrada_venda_descoberto[idx+i]['Entrada']} | 
+                        <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx+i]['Valor Entrada']}<br>
+                        <strong>Saída:</strong> {Lucro_por_entrada_venda_descoberto[idx+i]['Saida']} | 
+                        <strong> R$</strong> {Lucro_por_entrada_venda_descoberto[idx+i]['Valor Saida']}<br>
+                        <strong>Lucro/Perda:</strong> {'+' if Lucro_por_entrada_venda_descoberto[idx+i]['Lucro Perda'] > 0 
+                    else ''}{Lucro_por_entrada_venda_descoberto[idx+i]['Lucro Perda']:.2f}
                     </div>
                     """,
                     unsafe_allow_html=True
