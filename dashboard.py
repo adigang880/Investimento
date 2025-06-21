@@ -50,46 +50,86 @@ if not df_filtered.empty:
 
     ###########################################################################################################
     # Cria um índice de datas baseado em 'Data Inicio' e 'Data Final'
-    data_inicio = df_filtered['Data Inicio'].iloc[0].date()  # Extrai apenas a parte da data
-    data_inicio_str = data_inicio.strftime('%Y-%m-%d')  # Formato de data
+    # Cria um índice de datas baseado em 'Data Inicio' e 'Data Final'
+    data_inicio = df_filtered['Data Inicio'].iloc[0].date()
+    data_inicio_str = data_inicio.strftime('%Y-%m-%d')
     end_date = dt.datetime.now().strftime('%Y-%m-%d')
 
-    # Blocos de Resumo na barra lateral
+    # Preparar dados para o resumo com base no filtro selecionado
+    Lucro_por_entrada_compra = df_filtered['Lucro/Perda Por Entrada Compra'].iloc[0]
+    Lucro_por_entrada_venda_descoberto = df_filtered['Lucro/Perda Por Entrada Venda Descoberto'].iloc[0]
+
+    # Combinar e filtrar
+    if tipo_operacao == "Todas as operações":
+        operacoes_filtradas = Lucro_por_entrada_compra + Lucro_por_entrada_venda_descoberto
+    elif tipo_operacao == "Apenas Compras e Vendas":
+        operacoes_filtradas = Lucro_por_entrada_compra
+    else:  # Apenas Venda a Descoberto
+        operacoes_filtradas = Lucro_por_entrada_venda_descoberto
+
+    # Cálculos dinâmicos
+    numero_operacoes = len(operacoes_filtradas)
+    numero_ganhas = sum(1 for op in operacoes_filtradas if op['Lucro Perda'] > 0)
+    numero_perdidas = numero_operacoes - numero_ganhas
+    lucro_total = sum(op['Lucro Perda'] for op in operacoes_filtradas)
+    porcentagem_acerto = (numero_ganhas / numero_operacoes) * 100 if numero_operacoes else 0
+    media_ganhos = (
+        sum(op['Lucro Perda'] for op in operacoes_filtradas if op['Lucro Perda'] > 0) / numero_ganhas
+        if numero_ganhas else 0
+    )
+    media_perdas = (
+        sum(op['Lucro Perda'] for op in operacoes_filtradas if op['Lucro Perda'] < 0) / numero_perdidas
+        if numero_perdidas else 0
+    )
+    media_dias = (
+        sum(op['Dias Ativo'] for op in operacoes_filtradas) / numero_operacoes
+        if numero_operacoes else 0
+    )
+
+    banca_inicial = df_filtered['Banca Inicial'].iloc[0]
+    banca_final = banca_inicial + lucro_total
+    total_dias = df_filtered['Total Dias Passados'].iloc[0]
+
+    # Cotação atual
     dtd = yf.Ticker(ativo + '.SA')
     cotacao_atual = dtd.history(period='1d')
     cotacao_atual = cotacao_atual['Close'].iloc[0]
+
+    # Sidebar dinâmico
     st.sidebar.markdown(f"**Cotação Atual:** {cotacao_atual:.2f}")
     st.sidebar.markdown(f"**Data de Inicio:** {data_inicio_str}")
     st.sidebar.markdown(f"**Data Final:** {end_date}")
-    st.sidebar.markdown(f"**Banca Inicial:** R$ {df_filtered['Banca Inicial'].iloc[0]:.2f}")
-    st.sidebar.markdown(f"**Banca Final:** R$ {df_filtered['Banca Final'].iloc[0]:.2f}")
-    st.sidebar.markdown(f"**Lucro/Perda Total:** R$ {df_filtered['Lucro Perda'].iloc[0]:.2f}")
-    st.sidebar.markdown(f"**Número Total de Operações:** {df_filtered['Numero Operacoes'].iloc[0]}")
-    st.sidebar.markdown(f"**Número de Operações Ganhas:** {df_filtered['Numero Operacoes Ganhas'].iloc[0]}")
-    st.sidebar.markdown(f"**Número de Operações Perdidas:** {df_filtered['Numero Operacoes'].iloc[0] - df_filtered['Numero Operacoes Ganhas'].iloc[0]}")
-    st.sidebar.markdown(f"**Porcentagem de Acerto:** {df_filtered['Porcentagem Acerto'].iloc[0] * 100:.2f}%")
-    st.sidebar.markdown(f"**Média de Ganhos:** {df_filtered['Media Ganhos'].iloc[0]:.2f}")
-    st.sidebar.markdown(f"**Média de Perdas:** {df_filtered['Media Perdas'].iloc[0]:.2f}")
-    st.sidebar.markdown(f"**Média de Dias Operações:** {df_filtered['Media Dias Operacao'].iloc[0]:.0f}")
-    st.sidebar.markdown(f"**Total de Dias Passados:** {df_filtered['Total Dias Passados'].iloc[0]:.0f}")
+    st.sidebar.markdown(f"**Banca Inicial:** R$ {banca_inicial:.2f}")
+    st.sidebar.markdown(f"**Banca Final:** R$ {banca_final:.2f}")
+    st.sidebar.markdown(f"**Lucro/Perda Total:** R$ {lucro_total:.2f}")
+    st.sidebar.markdown(f"**Número Total de Operações:** {numero_operacoes}")
+    st.sidebar.markdown(f"**Número de Operações Ganhas:** {numero_ganhas}")
+    st.sidebar.markdown(f"**Número de Operações Perdidas:** {numero_perdidas}")
+    st.sidebar.markdown(f"**Porcentagem de Acerto:** {porcentagem_acerto:.2f}%")
+    st.sidebar.markdown(f"**Média de Ganhos:** {media_ganhos:.2f}")
+    st.sidebar.markdown(f"**Média de Perdas:** {media_perdas:.2f}")
+    st.sidebar.markdown(f"**Média de Dias Operações:** {media_dias:.0f}")
+    st.sidebar.markdown(f"**Total de Dias Passados:** {total_dias}")
 
+    # Entradas em aberto
     name = 'Sem Entrada em Aberto'
     data_inicio_new = ''
     valor_str = ''
 
-    if 'Entrada Aberta Compra' in df_filtered.columns and not df_filtered['Entrada Aberta Compra'].isna().all():
-        if df_filtered['Entrada Aberta Compra'].iloc[0]:  # Verificar se o primeiro valor não é vazio
-            name = 'Entrada em Aberto de Compra'
-            data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'].iloc[0].split(", ")
+    if tipo_operacao in ["Todas as operações", "Apenas Compras e Vendas"]:
+        if 'Entrada Aberta Compra' in df_filtered.columns and not df_filtered['Entrada Aberta Compra'].isna().all():
+            if df_filtered['Entrada Aberta Compra'].iloc[0]:
+                name = 'Entrada em Aberto de Compra'
+                data_inicio_new, valor_str = df_filtered['Entrada Aberta Compra'].iloc[0].split(", ")
 
-    # Verificar se 'Entrada Aberta Venda Descoberto' tem dados e extrair se sim
-    if 'Entrada Aberta Venda Descoberto' in df_filtered.columns and not df_filtered[
-        'Entrada Aberta Venda Descoberto'].isna().all():
-        if df_filtered['Entrada Aberta Venda Descoberto'].iloc[0]:  # Verificar se o primeiro valor não é vazio
-            name = 'Entrada em Aberto de Venda a Descoberto'
-            data_inicio_new, valor_str = df_filtered['Entrada Aberta Venda Descoberto'].iloc[0].split(", ")
+    if tipo_operacao in ["Todas as operações", "Apenas Venda a Descoberto"]:
+        if 'Entrada Aberta Venda Descoberto' in df_filtered.columns and not df_filtered[
+            'Entrada Aberta Venda Descoberto'].isna().all():
+            if df_filtered['Entrada Aberta Venda Descoberto'].iloc[0]:
+                name = 'Entrada em Aberto de Venda a Descoberto'
+                data_inicio_new, valor_str = df_filtered['Entrada Aberta Venda Descoberto'].iloc[0].split(", ")
 
-    # Exibir as informações no sidebar dentro de um bloco com borda
+    # Bloco em destaque
     st.sidebar.markdown(
         f"""
         <style>
