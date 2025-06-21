@@ -37,6 +37,11 @@ df['Evolucao Banca'] = df['Evolucao Banca'].apply(clean_column)
 
 ativo = st.sidebar.selectbox('Ativo', df['Ativo'])
 
+tipo_operacao = st.sidebar.selectbox(
+    "Filtrar por tipo de operação",
+    ["Todas as operações", "Apenas Compras e Vendas", "Apenas Venda a Descoberto"]
+)
+
 # Cria filtro dos ativo
 df_filtered = df[df['Ativo'] == ativo]
 
@@ -260,7 +265,7 @@ if not df_filtered.empty:
                 if not dff.empty and y_values and x_values:
                     # Dados para os gráficos de Candle e Evolução da Banca
                     # Gráfico de Candlestick
-                    data = [
+                    fig_data = [
                         go.Candlestick(
                             x=dff.index,
                             open=dff['Open'],
@@ -268,62 +273,65 @@ if not df_filtered.empty:
                             low=dff['Low'],
                             close=dff['Close'],
                             name='Candle'
-                        ),
-                        # Adicionando os sinais de compra (buy_signals)
-                        go.Scatter(
-                            x=[signal[0] for signal in buy_signals],
-                            y=[signal[1] for signal in buy_signals],
-                            mode='markers',
-                            name='Compras',
-                            marker=dict(symbol='triangle-up', color='green', size=15),
-                            showlegend=True
-                        ),
-                        # Adicionando os sinais de venda (sell_signals)
-                        go.Scatter(
-                            x=[signal[0] for signal in sell_signals],
-                            y=[signal[1] for signal in sell_signals],
-                            mode='markers',
-                            name='Vendas',
-                            marker=dict(symbol='triangle-down', color='red', size=15),
-                            showlegend=True
-                        ),
-                        # Adicionando sinais de short (short_signals)
-                        go.Scatter(
-                            x=[signal[0] for signal in short_signals],
-                            y=[signal[1] for signal in short_signals],
-                            mode='markers',
-                            name='Venda Descoberta',
-                            marker=dict(symbol='triangle-down', color='black', size=10),
-                            showlegend=True
-                        ),
-                        # Adicionando sinais de cover (cover_signals)
-                        go.Scatter(
-                            x=[signal[0] for signal in cover_signals],
-                            y=[signal[1] for signal in cover_signals],
-                            mode='markers',
-                            name='Compra Descoberta',
-                            marker=dict(symbol='triangle-up', color='blue', size=10),
-                            showlegend=True
-                        ),
-                        # Adicionando sinais de abertura de compra
-                        go.Scatter(
-                            x=[buy_open[0]] if len(buy_open) > 1 else [],
-                            y=[buy_open[1]] if len(buy_open) > 1 else [],
-                            mode='markers',
-                            marker=dict(symbol='star', color='green', size=15),
-                            name='Abertura de Compra'
-                        ),
-                        # Adicionando sinais de abertura de venda
-                        go.Scatter(
-                            x=[sell_open[0]] if len(sell_open) > 1 else [],
-                            y=[sell_open[1]] if len(sell_open) > 1 else [],
-                            mode='markers',
-                            marker=dict(symbol='star', color='red', size=15),
-                            name='Abertura de Venda'
-                        )
-                    ]
+                        )]
+                    # Filtrar sinais conforme o menu
+                    if tipo_operacao in ["Todas as operações", "Apenas Compras e Vendas"]:
+                        fig_data.extend([
+                            go.Scatter(
+                                x=[signal[0] for signal in buy_signals],
+                                y=[signal[1] for signal in buy_signals],
+                                mode='markers',
+                                name='Compras',
+                                marker=dict(symbol='triangle-up', color='green', size=15),
+                                showlegend=True
+                            ),
+                            go.Scatter(
+                                x=[signal[0] for signal in sell_signals],
+                                y=[signal[1] for signal in sell_signals],
+                                mode='markers',
+                                name='Vendas',
+                                marker=dict(symbol='triangle-down', color='red', size=15),
+                                showlegend=True
+                            ),
+                            go.Scatter(
+                                x=[buy_open[0]] if len(buy_open) > 1 else [],
+                                y=[buy_open[1]] if len(buy_open) > 1 else [],
+                                mode='markers',
+                                marker=dict(symbol='star', color='green', size=15),
+                                name='Abertura de Compra'
+                            )
+                        ])
+
+                    if tipo_operacao in ["Todas as operações", "Apenas Venda a Descoberto"]:
+                        fig_data.extend([
+                            go.Scatter(
+                                x=[signal[0] for signal in short_signals],
+                                y=[signal[1] for signal in short_signals],
+                                mode='markers',
+                                name='Venda Descoberta',
+                                marker=dict(symbol='triangle-down', color='black', size=10),
+                                showlegend=True
+                            ),
+                            go.Scatter(
+                                x=[signal[0] for signal in cover_signals],
+                                y=[signal[1] for signal in cover_signals],
+                                mode='markers',
+                                name='Compra Descoberta',
+                                marker=dict(symbol='triangle-up', color='blue', size=10),
+                                showlegend=True
+                            ),
+                            go.Scatter(
+                                x=[sell_open[0]] if len(sell_open) > 1 else [],
+                                y=[sell_open[1]] if len(sell_open) > 1 else [],
+                                mode='markers',
+                                marker=dict(symbol='star', color='red', size=15),
+                                name='Abertura de Venda'
+                            )
+                        ])
+
                     # Cria o gráfico
-                    fig_candle = go.Figure(data=data)
+                    fig_candle = go.Figure(data=fig_data)
+
 
                     # Atualiza layout
                     fig_candle.update_layout(
