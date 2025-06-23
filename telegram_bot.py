@@ -1,11 +1,13 @@
 # telegram_bot.py
 import json
 import requests
+import pandas as pd
 from datetime import datetime
 
 TOKEN = '7043331439:AAFg1xP3WlU-96qn1pDRtcRbKTFaDSV0vX4'
 CHAT_ID = '6644531818'
 
+CAMINHO_ALERTAS = 'logs/alertas_automaticos.csv'
 #adigangBot
 def enviar_sinais_para_telegram(caminho_arquivo):
     with open(caminho_arquivo, 'r') as f:
@@ -34,5 +36,36 @@ def enviar_sinais_para_telegram(caminho_arquivo):
 
     print("Sinais enviados com sucesso para o Telegram!")
 
+def enviar_alertas():
+    try:
+        df = pd.read_csv(CAMINHO_ALERTAS)
+    except FileNotFoundError:
+        print("Arquivo de alertas não encontrado.")
+        return
+
+    if df.empty:
+        print("Nenhum alerta para enviar.")
+        return
+
+    for _, row in df.iterrows():
+        mensagem = (
+            f"🚨 *Alerta Automático!*"
+            f"*Ativo:* {row['Ativo']}"
+            f"*Data:* {row['Data']}"
+            f"*Modelo:* {row['Modelo']}"
+            f"*Sharpe:* {row['Sharpe']:.2f} | *Retorno:* {row['Retorno']:.2f}%"
+            f"*Alocação:* R$ {row['Alocacao']:.2f}"
+            f"*Gatilhos:* {' | '.join(eval(row['Alertas']) if isinstance(row['Alertas'], str) else row['Alertas'])}"
+        )
+
+        requests.post(
+            f"https://api.telegram.org/bot{TOKEN}/sendMessage",
+            data={"chat_id": CHAT_ID, "text": mensagem, "parse_mode": "Markdown"}
+        )
+
+    print("Alertas enviados para o Telegram!")
+
+
 if __name__ == '__main__':
     enviar_sinais_para_telegram('sinais_telegram.json')
+    enviar_alertas()
