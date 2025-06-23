@@ -180,6 +180,7 @@ if os.path.exists(multi_path):
     st.plotly_chart(fig_bar, use_container_width=True)
 else:
     st.info("Execute 'comparador_multiativo.py' para visualizar comparações por ativo.")
+
 # Forward Test
 st.subheader("🚀 Simulação Forward Test (Futuro Real)")
 if os.path.exists("logs/forward_test.csv"):
@@ -193,3 +194,12 @@ if os.path.exists("logs/forward_test.csv"):
     st.plotly_chart(fig_fw, use_container_width=True)
 else:
     st.info("Execute 'forward_test.py' para gerar a simulação do período futuro.")
+
+# Alertas Automáticos
+st.subheader("🚨 Gatilhos Automáticos por Métricas")
+alerta_path = "logs/alertas_automaticos.csv"
+if os.path.exists(alerta_path):
+    df_alertas = pd.read_csv(alerta_path)
+    st.dataframe(df_alertas)
+else:
+    st.info("Nenhum alerta disponível. Execute 'gatilhos_automaticos.py' para gerar.")
