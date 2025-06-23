@@ -152,3 +152,32 @@ if comp_path:
     st.markdown(f"### 🔹 Estratégia Recomendável: **{melhor}** com base no desempenho médio das janelas")
 else:
     st.info("Nenhum comparador de janelas encontrado. Execute 'comparador_janelas.py'.")
+
+# Comparador Multiativo
+st.subheader("📊 Comparador Multiativo Técnica vs ML")
+multi_path = "logs/comparador_multiativo.csv"
+if os.path.exists(multi_path):
+    df_multi = pd.read_csv(multi_path)
+    st.dataframe(df_multi)
+
+    # Ranking por ativo: qual estratégia venceu mais vezes?
+    df_multi["Vencedor"] = df_multi.apply(
+        lambda x: "Técnica" if x["Ret_Técnica"] > x["Ret_ML"] else "ML", axis=1
+    )
+    ranking = df_multi.groupby(["Ativo", "Vencedor"]).size().unstack(fill_value=0)
+    ranking["Total"] = ranking.sum(axis=1)
+    ranking["% ML"] = (ranking.get("ML", 0) / ranking["Total"] * 100).round(1)
+    ranking["% Técnica"] = (ranking.get("Técnica", 0) / ranking["Total"] * 100).round(1)
+
+    st.markdown("### 🏅 Ranking de Estratégias por Ativo")
+    st.dataframe(ranking)
+
+    st.markdown("### 📈 Gráfico de Vitória por Estratégia")
+    fig_bar = go.Figure()
+    fig_bar.add_trace(go.Bar(x=ranking.index, y=ranking["% Técnica"], name="Técnica"))
+    fig_bar.add_trace(go.Bar(x=ranking.index, y=ranking["% ML"], name="ML"))
+    fig_bar.update_layout(barmode="group", title="Vitórias por Estratégia (%)", xaxis_title="Ativo", yaxis_title="% Vitórias")
+    st.plotly_chart(fig_bar, use_container_width=True)
+else:
+    st.info("Execute 'comparador_multiativo.py' para visualizar comparações por ativo.")
+
