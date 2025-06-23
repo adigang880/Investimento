@@ -180,4 +180,16 @@ if os.path.exists(multi_path):
     st.plotly_chart(fig_bar, use_container_width=True)
 else:
     st.info("Execute 'comparador_multiativo.py' para visualizar comparações por ativo.")
+# Forward Test
+st.subheader("🚀 Simulação Forward Test (Futuro Real)")
+if os.path.exists("logs/forward_test.csv"):
+    df_fwd = pd.read_csv("logs/forward_test.csv")
+    st.dataframe(df_fwd)
 
+    fig_fw = go.Figure()
+    fig_fw.add_trace(go.Bar(x=["Técnica"], y=df_fwd["Técnica Retorno"], name="Técnica"))
+    fig_fw.add_trace(go.Bar(x=["ML"], y=df_fwd["ML Retorno"], name="ML"))
+    fig_fw.update_layout(title="Retorno no Forward Test", yaxis_title="Retorno (%)")
+    st.plotly_chart(fig_fw, use_container_width=True)
+else:
+    st.info("Execute 'forward_test.py' para gerar a simulação do período futuro.")
