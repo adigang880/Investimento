@@ -120,3 +120,35 @@ if backtests:
         st.dataframe(df_bt)
 else:
     st.info("Nenhum backtest por janelas encontrado. Execute 'backtest_janelas.py'.")
+
+# Comparador técnica vs ML
+st.subheader("🔄 Comparação Estratégia Técnica vs IA por Janela")
+comp_path = max([f for f in os.listdir("logs") if f.startswith("comparador_janelas_") and f.endswith(".csv")], default=None)
+if comp_path:
+    df_comp = pd.read_csv(os.path.join("logs", comp_path))
+    st.dataframe(df_comp)
+
+    # Gráfico de retorno
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df_comp["Início"], y=df_comp["Ret_Técnica"], name="Técnica"))
+    fig.add_trace(go.Scatter(x=df_comp["Início"], y=df_comp["Ret_ML"], name="ML"))
+    fig.update_layout(title="Retorno por Janela: Técnica vs ML", xaxis_title="Início da Janela", yaxis_title="Retorno (%)")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Estatísticas resumidas
+    st.markdown("### 🔢 Resumo da Competição por Janela")
+    tecnica_vitorias = (df_comp["Ret_Técnica"] > df_comp["Ret_ML"]).sum()
+    ml_vitorias = (df_comp["Ret_ML"] > df_comp["Ret_Técnica"]).sum()
+    st.write(f"🔧 Técnica venceu em: {tecnica_vitorias} janelas")
+    st.write(f"🤖 ML venceu em: {ml_vitorias} janelas")
+
+    media_tec = df_comp["Ret_Técnica"].mean()
+    media_ml = df_comp["Ret_ML"].mean()
+    st.write(f"Média de retorno Técnica: {media_tec:.2f}%")
+    st.write(f"Média de retorno ML: {media_ml:.2f}%")
+
+    # Recomendação final
+    melhor = "ML" if media_ml > media_tec else "Técnica"
+    st.markdown(f"### 🔹 Estratégia Recomendável: **{melhor}** com base no desempenho médio das janelas")
+else:
+    st.info("Nenhum comparador de janelas encontrado. Execute 'comparador_janelas.py'.")
