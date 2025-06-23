@@ -109,3 +109,14 @@ if relatorio_path:
     st.dataframe(df_parametros)
 else:
     st.info("Gere o relatório de parâmetros executando o script 'relatorio_parametros.py'")
+
+# Backtest por janelas
+st.subheader("📅 Desempenho por Janelas Temporais")
+backtests = [f for f in os.listdir("logs") if f.startswith("backtest_janelas_") and f.endswith(".csv")]
+if backtests:
+    for file in backtests:
+        st.markdown(f"**{file.replace('backtest_janelas_', '').replace('.csv', '')}**")
+        df_bt = pd.read_csv(os.path.join("logs", file))
+        st.dataframe(df_bt)
+else:
+    st.info("Nenhum backtest por janelas encontrado. Execute 'backtest_janelas.py'.")

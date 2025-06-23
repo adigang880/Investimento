@@ -41,7 +41,7 @@ def processar_ativo(ticker):
         df = pd.read_parquet(cache_path)
     else:
         df = yf.download(ticker, start=data_inicio, end=data_fim)
-        df.columns = [col[0] for col in df.columns] if isinstance(df.columns[0], tuple) else df.columns
+        df.columns = [col[0] for col in df.columns]
         df.to_parquet(cache_path)
 
     df = calcular_todos_indicadores(df)
