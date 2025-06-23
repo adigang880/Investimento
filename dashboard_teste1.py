@@ -5,10 +5,9 @@ import plotly.graph_objs as go
 import datetime
 import yfinance as yf
 import numpy as np
+import os
 
-# PARA EXECUTAR
-# streamlit run dashboard_teste1.py
-
+#streamlit run dashboard.py
 st.set_page_config(layout="wide")
 st.title("📊 Dashboard de Estratégias e Sinais")
 
@@ -88,8 +87,6 @@ st.plotly_chart(fig_dd, use_container_width=True)
 
 # Detalhes por ativo
 st.subheader("🔗 Detalhes Técnicos e Estratégicos")
-cols = ["ativo", "data", "tipo", "preco", "modelo", "params", "sharpe", "retorno", "alocacao"]
-detalhes = sinais[cols].sort_values("data", ascending=False)
 colunas_formatadas = {
     "preco": "{:.2f}",
     "sharpe": "{:.2f}",
@@ -97,4 +94,18 @@ colunas_formatadas = {
     "alocacao": "{:.2f}"
 }
 
-st.dataframe(detalhes.reset_index(drop=True).style.format(colunas_formatadas))
+colunas_visiveis = ["ativo", "data", "tipo", "preco", "modelo", "params", "sharpe", "retorno", "alocacao"]
+if set(colunas_visiveis).issubset(sinais.columns):
+    detalhes = sinais[colunas_visiveis].sort_values("data", ascending=False)
+    st.dataframe(detalhes.reset_index(drop=True).style.format(colunas_formatadas))
+else:
+    st.warning("Algumas colunas esperadas não estão presentes no arquivo de sinais.")
+
+# Relatório de parâmetros
+st.subheader("📊 Relatório de Parâmetros e Sugestões")
+relatorio_path = max([f for f in os.listdir('.') if f.startswith("relatorio_parametros_") and f.endswith(".csv")], default=None)
+if relatorio_path:
+    df_parametros = pd.read_csv(relatorio_path)
+    st.dataframe(df_parametros)
+else:
+    st.info("Gere o relatório de parâmetros executando o script 'relatorio_parametros.py'")
