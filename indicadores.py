@@ -32,9 +32,41 @@ def calcular_atr(df, period=14):
     df['ATR'] = tr.rolling(window=period).mean()
     return df
 
+def calcular_sma_ema(df, short=9, long=21):
+    df['SMA'] = df['Close'].rolling(window=short).mean()
+    df['EMA'] = df['Close'].ewm(span=long, adjust=False).mean()
+    return df
+
+def calcular_bollinger(df, window=20, std_mult=2):
+    df['Bollinger_MA'] = df['Close'].rolling(window=window).mean()
+    std = df['Close'].rolling(window=window).std()
+    df['Bollinger_Upper'] = df['Bollinger_MA'] + std_mult * std
+    df['Bollinger_Lower'] = df['Bollinger_MA'] - std_mult * std
+    return df
+
+def calcular_obv(df):
+    obv = [0]
+    for i in range(1, len(df)):
+        if df['Close'].iloc[i] > df['Close'].iloc[i-1]:
+            obv.append(obv[-1] + df['Volume'].iloc[i])
+        elif df['Close'].iloc[i] < df['Close'].iloc[i-1]:
+            obv.append(obv[-1] - df['Volume'].iloc[i])
+        else:
+            obv.append(obv[-1])
+    df['OBV'] = obv
+    return df
+
+def calcular_roc(df, period=10):
+    df['ROC'] = ((df['Close'] - df['Close'].shift(period)) / df['Close'].shift(period)) * 100
+    return df
+
 def calcular_todos_indicadores(df):
     df = calcular_rsi(df)
     df = calcular_macd(df)
     df = calcular_estocastico(df)
     df = calcular_atr(df)
+    df = calcular_sma_ema(df)
+    df = calcular_bollinger(df)
+    df = calcular_obv(df)
+    df = calcular_roc(df)
     return df
