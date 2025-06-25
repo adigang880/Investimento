@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a64a5b13-6cc1-47a8-8944-d4a4862129b5" name="Changes" comment="teste 1.2">
+      <change afterPath="$PROJECT_DIR$/cache/BBAS3.SA.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cache/VALE3.SA.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/alertas_automaticos.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relatorio_parametros_20250625.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backtest_janelas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backtest_janelas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cache/PETR4.SA.parquet" beforeDir="false" afterPath="$PROJECT_DIR$/cache/PETR4.SA.parquet" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cache/['PETR4.SA'].parquet" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/comparador_janelas.py" beforeDir="false" afterPath="$PROJECT_DIR$/comparador_janelas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comparador_multiativo.py" beforeDir="false" afterPath="$PROJECT_DIR$/comparador_multiativo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard_teste1.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard_teste1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forward_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/forward_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/BBAS3.SA.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/PETR4.SA.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/PETR4.SA.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/VALE3.SA.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/VALE3.SA.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/['PETR4.SA'].log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/summary.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/summary.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signal_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/signal_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sinais_telegram.json" beforeDir="false" afterPath="$PROJECT_DIR$/sinais_telegram.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2m9nNywCc43TAytVoSQN1h2cpnX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;teste1&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Documentos/Investimento&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;python.debugger.dataview.coloredbydefault&quot;: &quot;false&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Documentos\Investimento" />
+      <recent name="D:\06_05_2022\Eletrica\MBA\Codigo\Projeto_aplicado" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.pipeline">
+    <configuration name="comparador_multiativo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Projeto_aplicado" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/comparador_multiativo.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="forward_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Projeto_aplicado" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/forward_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="gatilhos_automaticos" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Projeto_aplicado" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gatilhos_automaticos.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Projeto_aplicado" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="relatorio_parametros" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Projeto_aplicado" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relatorio_parametros.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.pipeline" />
+        <item itemvalue="Python.relatorio_parametros" />
+        <item itemvalue="Python.forward_test" />
+        <item itemvalue="Python.gatilhos_automaticos" />
+        <item itemvalue="Python.comparador_multiativo" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a64a5b13-6cc1-47a8-8944-d4a4862129b5" name="Changes" comment="" />
+      <created>1726497624002</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1726497624002</updated>
+      <workItem from="1726497625090" duration="5027000" />
+      <workItem from="1726504455002" duration="647000" />
+      <workItem from="1726506072362" duration="1000" />
+      <workItem from="1726523228481" duration="4907000" />
+      <workItem from="1726528419758" duration="284000" />
+      <workItem from="1726528718558" duration="869000" />
+      <workItem from="1726570287290" duration="124000" />
+      <workItem from="1726585045624" duration="2020000" />
+      <workItem from="1726595346563" duration="358000" />
+      <workItem from="1726604908977" duration="2834000" />
+      <workItem from="1726694615208" duration="2971000" />
+      <workItem from="1726759731513" duration="45000" />
+      <workItem from="1726759868013" duration="39000" />
+      <workItem from="1726761021946" duration="59000" />
+      <workItem from="1726779235528" duration="1431000" />
+      <workItem from="1726834213694" duration="1975000" />
+      <workItem from="1727354250388" duration="35000" />
+      <workItem from="1727381811397" duration="71000" />
+      <workItem from="1727694560503" duration="755000" />
+      <workItem from="1727703244931" duration="8000" />
+      <workItem from="1727773450515" duration="1391000" />
+      <workItem from="1727777338175" duration="1707000" />
+      <workItem from="1727799038837" duration="4479000" />
+      <workItem from="1727804428123" duration="82000" />
+      <workItem from="1727818245561" duration="3299000" />
+      <workItem from="1727867086329" duration="598000" />
+      <workItem from="1727897845392" duration="577000" />
+      <workItem from="1728397198612" duration="8053000" />
+      <workItem from="1728471972793" duration="5608000" />
+      <workItem from="1728484434057" duration="405000" />
+      <workItem from="1728498485564" duration="2153000" />
+      <workItem from="1728511108654" duration="837000" />
+      <workItem from="1728512118004" duration="281000" />
+      <workItem from="1728571024735" duration="1575000" />
+      <workItem from="1728594910994" duration="10170000" />
+      <workItem from="1728651561289" duration="11664000" />
+      <workItem from="1728687306498" duration="2701000" />
+      <workItem from="1729352595117" duration="16000" />
+      <workItem from="1729765120286" duration="13345000" />
+      <workItem from="1729795048861" duration="1234000" />
+      <workItem from="1729807341584" duration="1585000" />
+      <workItem from="1729860408252" duration="14710000" />
+      <workItem from="1729894258105" duration="5333000" />
+      <workItem from="1729940145946" duration="3467000" />
+      <workItem from="1730118316071" duration="1183000" />
+      <workItem from="1730125342746" duration="15000" />
+      <workItem from="1730133953677" duration="2561000" />
+      <workItem from="1730151437592" duration="3664000" />
+      <workItem from="1730155805342" duration="399000" />
+      <workItem from="1730166166312" duration="1905000" />
+      <workItem from="1730202094698" duration="854000" />
+      <workItem from="1730207810159" duration="1799000" />
+      <workItem from="1731167016944" duration="40000" />
+      <workItem from="1731167076032" duration="3812000" />
+      <workItem from="1731255766793" duration="331000" />
+      <workItem from="1733147794922" duration="600000" />
+      <workItem from="1750175353397" duration="1719000" />
+      <workItem from="1750177547139" duration="364000" />
+      <workItem from="1750203884666" duration="1615000" />
+      <workItem from="1750205553790" duration="501000" />
+      <workItem from="1750206096141" duration="2785000" />
+      <workItem from="1750460201365" duration="272000" />
+      <workItem from="1750536585974" duration="10531000" />
+      <workItem from="1750701107688" duration="3928000" />
+      <workItem from="1750715439981" duration="6622000" />
+      <workItem from="1750809124566" duration="3883000" />
+      <workItem from="1750855404383" duration="12890000" />
+      <workItem from="1750869057327" duration="670000" />
+    </task>
+    <task id="LOCAL-00001" summary="coleta de dados fundamentalistas com webscraping com os dados trados e o cliente podendo escolher alguns filtros">
+      <option name="closed" value="true" />
+      <created>1726695866024</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1726695866024</updated>
+    </task>
+    <task id="LOCAL-00002" summary="criação dos indicadores e dos metodos de compra e venda">
+      <option name="closed" value="true" />
+      <created>1728399136492</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728399136492</updated>
+    </task>
+    <task id="LOCAL-00003" summary="graficos">
+      <option name="closed" value="true" />
+      <created>1728400332764</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1728400332764</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Alterando gráficos">
+      <option name="closed" value="true" />
+      <created>1728400730975</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728400730975</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Alterando gráficos">
+      <option name="closed" value="true" />
+      <created>1728400780678</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1728400780678</updated>
+    </task>
+    <task id="LOCAL-00006" summary="criação de stop loss">
+      <option name="closed" value="true" />
+      <created>1728405356657</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1728405356657</updated>
+    </task>
+    <task id="LOCAL-00007" summary="entrada do usuário">
+      <option name="closed" value="true" />
+      <created>1728478438823</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1728478438823</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Plotar a entrada aberta">
+      <option name="closed" value="true" />
+      <created>1728595312445</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1728595312445</updated>
+    </task>
+    <task id="LOCAL-00009" summary="dashboard">
+      <option name="closed" value="true" />
+      <created>1728597556081</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1728597556081</updated>
+    </task>
+    <task id="LOCAL-00010" summary="dados do dashboard">
+      <option name="closed" value="true" />
+      <created>1728602708850</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1728602708850</updated>
+    </task>
+    <task id="LOCAL-00011" summary="montagem dos dados para dashboard">
+      <option name="closed" value="true" />
+      <created>1728604650778</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728604650778</updated>
+    </task>
+    <task id="LOCAL-00012" summary="criação do dashboard">
+      <option name="closed" value="true" />
+      <created>1728661974063</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1728661974063</updated>
+    </task>
+    <task id="LOCAL-00013" summary="evolução de banca dashboard">
+      <option name="closed" value="true" />
+      <created>1728663513745</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1728663513745</updated>
+    </task>
+    <task id="LOCAL-00014" summary="correção da banca final dashboard">
+      <option name="closed" value="true" />
+      <created>1728688721056</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1728688721056</updated>
+    </task>
+    <task id="LOCAL-00015" summary="mostrar entradas dasboard">
+      <option name="closed" value="true" />
+      <created>1729769626285</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1729769626285</updated>
+    </task>
+    <task id="LOCAL-00016" summary="mostrar entradas e saidas candle no dasboard">
+      <option name="closed" value="true" />
+      <created>1729770748438</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1729770748438</updated>
+    </task>
+    <task id="LOCAL-00017" summary="mostrar entradas e saidas candle no dasboard">
+      <option name="closed" value="true" />
+      <created>1729784174195</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1729784174195</updated>
+    </task>
+    <task id="LOCAL-00018" summary="mostrar entradas e saidas candle no dasboard">
+      <option name="closed" value="true" />
+      <created>1729786768575</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1729786768575</updated>
+    </task>
+    <task id="LOCAL-00019" summary="funcionando">
+      <option name="closed" value="true" />
+      <created>1729870117987</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1729870117987</updated>
+    </task>
+    <task id="LOCAL-00020" summary="novo dash com graficos pronto">
+      <option name="closed" value="true" />
+      <created>1729875682254</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1729875682254</updated>
+    </task>
+    <task id="LOCAL-00021" summary="novo dash com graficos pronto 1_1">
+      <option name="closed" value="true" />
+      <created>1729896686617</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1729896686617</updated>
+    </task>
+    <task id="LOCAL-00022" summary="novo dash com graficos pronto 1_2">
+      <option name="closed" value="true" />
+      <created>1729898701797</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1729898701797</updated>
+    </task>
+    <task id="LOCAL-00023" summary="novo dash com graficos pronto 1_2">
+      <option name="closed" value="true" />
+      <created>1729898725133</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1729898725133</updated>
+    </task>
+    <task id="LOCAL-00024" summary="novo dash com graficos pronto 1_3">
+      <option name="closed" value="true" />
+      <created>1729899446993</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1729899446993</updated>
+    </task>
+    <task id="LOCAL-00025" summary="novo dash com graficos pronto 1_4">
+      <option name="closed" value="true" />
+      <created>1729943176339</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1729943176339</updated>
+    </task>
+    <task id="LOCAL-00026" summary="novo dash com graficos pronto 1_4">
+      <option name="closed" value="true" />
+      <created>1729943636170</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1729943636170</updated>
+    </task>
+    <task id="LOCAL-00027" summary="novo dash com graficos pronto 1_4">
+      <option name="closed" value="true" />
+      <created>1730133984559</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1730133984559</updated>
+    </task>
+    <task id="LOCAL-00028" summary="readme">
+      <option name="closed" value="true" />
+      <created>1750177875042</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1750177875042</updated>
+    </task>
+    <task id="LOCAL-00029" summary="testando codigo">
+      <option name="closed" value="true" />
+      <created>1750207319356</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1750207319356</updated>
+    </task>
+    <task id="LOCAL-00030" summary="instruções">
+      <option name="closed" value="true" />
+      <created>1750460439092</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1750460439092</updated>
+    </task>
+    <task id="LOCAL-00031" summary="run code">
+      <option name="closed" value="true" />
+      <created>1750539978197</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1750539978197</updated>
+    </task>
+    <task id="LOCAL-00032" summary="dasboard run">
+      <option name="closed" value="true" />
+      <created>1750540202218</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1750540202218</updated>
+    </task>
+    <task id="LOCAL-00033" summary="dasboard run with second menu">
+      <option name="closed" value="true" />
+      <created>1750540624231</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1750540624231</updated>
+    </task>
+    <task id="LOCAL-00034" summary="dasboard run with second graf">
+      <option name="closed" value="true" />
+      <created>1750540984714</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1750540984714</updated>
+    </task>
+    <task id="LOCAL-00035" summary="some conjunto de blocos de acordo com filtros">
+      <option name="closed" value="true" />
+      <created>1750541247715</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1750541247715</updated>
+    </task>
+    <task id="LOCAL-00036" summary="correção dos blocos com as datas certas">
+      <option name="closed" value="true" />
+      <created>1750541943224</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1750541943224</updated>
+    </task>
+    <task id="LOCAL-00037" summary="alteração do menu lateral">
+      <option name="closed" value="true" />
+      <created>1750542285104</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1750542285104</updated>
+    </task>
+    <task id="LOCAL-00038" summary="correção da evolução da banca">
+      <option name="closed" value="true" />
+      <created>1750542754402</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1750542754402</updated>
+    </task>
+    <task id="LOCAL-00039" summary="estrategias otimizadas">
+      <option name="closed" value="true" />
+      <created>1750701159722</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1750701159722</updated>
+    </task>
+    <task id="LOCAL-00040" summary="estrategias otimizadas inicial">
+      <option name="closed" value="true" />
+      <created>1750705027965</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1750705027965</updated>
+    </task>
+    <task id="LOCAL-00041" summary="estrategias otimizadas 1.1">
+      <option name="closed" value="true" />
+      <created>1750717307498</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1750717307498</updated>
+    </task>
+    <task id="LOCAL-00042" summary="pacote 8 backtests por janelas temporais para todos os ativos">
+      <option name="closed" value="true" />
+      <created>1750717648415</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1750717648415</updated>
+    </task>
+    <task id="LOCAL-00043" summary="pacote 9  Comparador Automático por Janela">
+      <option name="closed" value="true" />
+      <created>1750718014496</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1750718014496</updated>
+    </task>
+    <task id="LOCAL-00044" summary="pacote 10 Comparador Multiativo">
+      <option name="closed" value="true" />
+      <created>1750718539925</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1750718539925</updated>
+    </task>
+    <task id="LOCAL-00045" summary="pacote 11 – Simulação Forward Test">
+      <option name="closed" value="true" />
+      <created>1750718794542</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1750718794542</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Pacote 12: Gatilhos automáticos com base em métricas">
+      <option name="closed" value="true" />
+      <created>1750718911633</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1750718911633</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Pacote 13: telegram">
+      <option name="closed" value="true" />
+      <created>1750719118668</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1750719118668</updated>
+    </task>
+    <task id="LOCAL-00048" summary="teste 1.1">
+      <option name="closed" value="true" />
+      <created>1750810254694</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1750810254694</updated>
+    </task>
+    <task id="LOCAL-00049" summary="teste 1.2">
+      <option name="closed" value="true" />
+      <created>1750861395065</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1750861395065</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="novo dash com graficos pronto 1_2" />
+    <MESSAGE value="novo dash com graficos pronto 1_3" />
+    <MESSAGE value="novo dash com graficos pronto 1_4" />
+    <MESSAGE value="readme" />
+    <MESSAGE value="testando codigo" />
+    <MESSAGE value="instruções" />
+    <MESSAGE value="run code" />
+    <MESSAGE value="dasboard run" />
+    <MESSAGE value="dasboard run with second menu" />
+    <MESSAGE value="dasboard run with second graf" />
+    <MESSAGE value="some conjunto de blocos de acordo com filtros" />
+    <MESSAGE value="correção dos blocos com as datas certas" />
+    <MESSAGE value="alteração do menu lateral" />
+    <MESSAGE value="correção da evolução da banca" />
+    <MESSAGE value="estrategias otimizadas" />
+    <MESSAGE value="estrategias otimizadas inicial" />
+    <MESSAGE value="estrategias otimizadas 1.1" />
+    <MESSAGE value="pacote 8 backtests por janelas temporais para todos os ativos" />
+    <MESSAGE value="pacote 9  Comparador Automático por Janela" />
+    <MESSAGE value="pacote 10 Comparador Multiativo" />
+    <MESSAGE value="pacote 11 – Simulação Forward Test" />
+    <MESSAGE value="Pacote 12: Gatilhos automáticos com base em métricas" />
+    <MESSAGE value="Pacote 13: telegram" />
+    <MESSAGE value="teste 1.1" />
+    <MESSAGE value="teste 1.2" />
+    <option name="LAST_COMMIT_MESSAGE" value="teste 1.2" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dashboard_teste1.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="197" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dashboard_teste1.py</url>
+          <line>111</line>
+          <option name="timeStamp" value="236" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pipeline.py</url>
+          <line>96</line>
+          <option name="timeStamp" value="243" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ml_models.py</url>
+          <line>123</line>
+          <option name="timeStamp" value="245" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pipeline.py</url>
+          <line>111</line>
+          <option name="timeStamp" value="246" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/signal_generator.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="247" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/metrics.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="254" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/metrics.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="257" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="datas.001" />
+        <watch expression="saida[0]" />
+        <watch expression="melhor['resultado']" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Investimento$backtest_janelas.coverage" NAME="backtest_janelas Coverage Results" MODIFIED="1750867402261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$pipeline.coverage" NAME="pipeline Coverage Results" MODIFIED="1750869100313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$run_all.coverage" NAME="run_all Coverage Results" MODIFIED="1750547052216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$dashboard_teste1.coverage" NAME="dashboard_teste1 Coverage Results" MODIFIED="1750866716504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$bet.coverage" NAME="bet Coverage Results" MODIFIED="1750175836336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$dashboard3222222.coverage" NAME="dashboard3222222 Coverage Results" MODIFIED="1729807782988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$dashboard.coverage" NAME="dashboard Coverage Results" MODIFIED="1750541791465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$technical_analysis.coverage" NAME="technical_analysis Coverage Results" MODIFIED="1728658512274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$dashboard.coverage" NAME="dashboard Coverage Results" MODIFIED="1729895695477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$dddd.coverage" NAME="dddd Coverage Results" MODIFIED="1728572562497" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1750715736193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MBA" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$fundamentalist.coverage" NAME="fundamentalist Coverage Results" MODIFIED="1726595647385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$technical_analysis_copy_copy.coverage" NAME="technical_analysis_copy_copy Coverage Results" MODIFIED="1731169313605" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$technical_analysis_copy.coverage" NAME="technical_analysis_copy Coverage Results" MODIFIED="1731255838005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$comparador_janelas.coverage" NAME="comparador_janelas Coverage Results" MODIFIED="1750867427220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$main.coverage" NAME="main Coverage Results" MODIFIED="1731169645132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$telegram_bot.coverage" NAME="telegram_bot Coverage Results" MODIFIED="1750546455417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$forward_test.coverage" NAME="forward_test Coverage Results" MODIFIED="1750867479401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$main.coverage" NAME="main Coverage Results" MODIFIED="1750538110233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$bet.coverage" NAME="bet Coverage Results" MODIFIED="1731255891495" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$dashboard111111111111.coverage" NAME="dashboard111111111111 Coverage Results" MODIFIED="1729787815621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$relatorio_parametros.coverage" NAME="relatorio_parametros Coverage Results" MODIFIED="1750867496945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$gatilhos_automaticos.coverage" NAME="gatilhos_automaticos Coverage Results" MODIFIED="1750867464692" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$signal_generator.coverage" NAME="signal_generator Coverage Results" MODIFIED="1750865569529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$dashboard1.coverage" NAME="dashboard1 Coverage Results" MODIFIED="1729895206240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Projeto_aplicado$teste_teste.coverage" NAME="teste_teste Coverage Results" MODIFIED="1729941103051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Investimento$comparador_multiativo.coverage" NAME="comparador_multiativo Coverage Results" MODIFIED="1750867447794" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
