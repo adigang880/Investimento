@@ -1,0 +1,13 @@
+Ativo,Data,Modelo,Alocacao,Sharpe,Retorno,Alertas
+PETR4.SA,2020-02-10,tecnica,10000,-0.9400000000000001,4.87,['🔻 Sharpe muito baixo']
+PETR4.SA,2020-02-19,tecnica,10000,-0.9400000000000001,4.87,['🔻 Sharpe muito baixo']
+PETR4.SA,2020-02-26,tecnica,10000,-0.9400000000000001,-3.47,"['🔻 Sharpe muito baixo', '📉 Retorno negativo']"
+PETR4.SA,2020-02-27,tecnica,10000,-0.9400000000000001,-3.47,"['🔻 Sharpe muito baixo', '📉 Retorno negativo']"
+PETR4.SA,2020-02-28,tecnica,10000,-0.9400000000000001,2.8,['🔻 Sharpe muito baixo']
+PETR4.SA,2020-03-03,tecnica,10000,-0.9400000000000001,2.8,['🔻 Sharpe muito baixo']
+PETR4.SA,2020-03-06,tecnica,10000,-0.9400000000000001,-29.7,"['🔻 Sharpe muito baixo', '📉 Retorno negativo']"
+PETR4.SA,2020-03-09,tecnica,10000,-0.9400000000000001,-29.7,"['🔻 Sharpe muito baixo', '📉 Retorno negativo']"
+PETR4.SA,2020-03-10,tecnica,10000,-0.9400000000000001,-9.74,"['🔻 Sharpe muito baixo', '📉 Retorno negativo']"
+PETR4.SA,2020-03-11,tecnica,10000,-0.9400000000000001,-9.74,"['🔻 Sharpe muito baixo', '📉 Retorno negativo']"
+PETR4.SA,2020-03-12,tecnica,10000,-0.9400000000000001,3.89,['🔻 Sharpe muito baixo']
+PETR4.SA,2020-03-16,tecnica,10000,-0.9400000000000001,3.89,['🔻 Sharpe muito baixo']

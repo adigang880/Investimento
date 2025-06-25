@@ -1,9 +1,9 @@
 Ticker: VALE3.SA
-Tipo: ml
-Modelo: desconhecido
-Params: modelo_ml_auto
-Sharpe: 11.82
-Retorno: 3.98%
-Sinais: 184
+Tipo: tecnica
+Modelo: estrategia_tecnica
+Params: {'rsi': 45, 'macd': (8, 17, 7), 'stoch': (14, 3), 'kd_thresholds': (30, 70)}
+Sharpe: 0.65
+Retorno: 1.75%
+Sinais: 416
 Último sinal: 2025-06-20 00:00:00
-Atualizado em: 2025-06-23 20:40:07.607827
+Atualizado em: 2025-06-25 13:41:49.716127

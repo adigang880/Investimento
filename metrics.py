@@ -29,7 +29,7 @@ def avaliar_estrategia(df, sinais, capital):
     quantidade = 0           # Quantidade de ativos comprados com o capital disponível
 
     # Itera sobre cada sinal para simular as operações
-    for sinal in sinais:
+    for i, sinal in enumerate(sinais):
         data = pd.to_datetime(sinal["data"])  # Converte a data do sinal para datetime
         preco = sinal["preco"]
 
@@ -48,15 +48,19 @@ def avaliar_estrategia(df, sinais, capital):
 
             # Calcula o lucro total da operação com base na diferença de preços e quantidade
             lucro_total = (preco - preco_entrada) * quantidade
+            retorno_pct = ((preco - preco_entrada) / preco_entrada) * 100
 
-            # Distribui o lucro igualmente entre os dias da operação
+            # Anexa o retorno individual ao sinal de venda, se possível
+            sinais[i]["retorno"] = retorno_pct
+            sinais[i-1]["retorno"] = retorno_pct
+
             num_dias = len(df_operacao)
-            if num_dias > 0:
-                lucro_por_dia = lucro_total / num_dias
-                df_operacao["retorno"] = lucro_por_dia
-                df.loc[posicao:data_saida, "retorno_diario"] = df_operacao["retorno"]
+            if num_dias > 1:
+                df_operacao["retorno"] = df_operacao["Close"].pct_change().fillna(0) * quantidade
+            else:
+                df_operacao["retorno"] = lucro_total
 
-            # Finaliza a posição
+            df.loc[posicao:data_saida, "retorno_diario"] = df_operacao["retorno"]
             posicao = None
 
     # Preenche valores nulos com zero (dias sem operação)

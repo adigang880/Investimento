@@ -1,0 +1,2 @@
+Ativo,Modelo,Sharpe,Retorno (%),Alocação (R$),RSI,MACD,"Stoch (K,D)",K/D thresholds,Sugestão
+PETR4.SA,tecnica,-0.94,-5.22,120000,20,"[12, 26, 9]","[14, 3]","[30, 70]",🔧 Testar ajustes nos thresholds de RSI e %K para melhorar entrada

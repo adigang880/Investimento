@@ -12,7 +12,7 @@ import os
 tickers = ["PETR4.SA", "VALE3.SA", "BBAS3.SA"]
 capital = 10000
 inicio = "2020-01-01"
-fim = "2024-06-01"
+fim = "2025-06-24"
 periodo_janela = 180
 
 # Parâmetros técnicos
@@ -28,7 +28,7 @@ os.makedirs("logs", exist_ok=True)
 
 for ticker in tickers:
     print(f"Processando {ticker}")
-    df = yf.download(ticker, start=inicio, end=fim)
+    df = yf.download(ticker, start=inicio, end=fim, auto_adjust=False)
     df.columns = [col[0] for col in df.columns]
     df = calcular_todos_indicadores(df)
     df.dropna(inplace=True)

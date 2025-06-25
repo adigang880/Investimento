@@ -84,24 +84,57 @@ def testar_modelos_ml(df, capital):
 
                 elif posicao is not None and pred == 0:
                     # Cálculo do lucro real
+                    retorno_pct_individual = ((preco - preco_entrada) / preco_entrada) * 100
+                    sinais.append({'data': data, 'tipo': 'venda', 'preco': preco, 'retorno': retorno_pct_individual})
                     lucro_total = (preco - preco_entrada) * quantidade
                     df_operacao = df.loc[posicao:data].copy()
                     num_dias = len(df_operacao)
 
-                    # Distribui o lucro igualmente entre os dias da operação
-                    if num_dias > 0:
-                        lucro_diario = lucro_total / num_dias
-                        df_operacao['retorno'] = lucro_diario
-                        df.loc[posicao:data, 'retorno_diario'] = df_operacao['retorno']
+                    if num_dias > 1:
+                        df_operacao['retorno'] = df_operacao['Close'].pct_change().fillna(0) * quantidade
+                    else:
+                        df_operacao['retorno'] = lucro_total
 
-                    posicao = None  # Finaliza posição
+                    df.loc[posicao:data, 'retorno_diario'] = df_operacao['retorno']
+                    posicao = None
 
-        # Calcula métricas finais do modelo
-        df['retorno_diario'] = df['retorno_diario'].fillna(0)
-        retorno_total = df['retorno_diario'].sum()
+            # FECHAMENTO FORÇADO da posição se ainda aberta no final do split
+            if posicao is not None:
+                # Usa o último índice do bloco de teste como data de venda
+                data_fechamento = df.index[test_idx[-1]]
+                preco_fechamento = df['Close'].iloc[test_idx[-1]]
+                retorno_pct_individual = ((preco_fechamento - preco_entrada) / preco_entrada) * 100
+
+                sinais.append({'data': data_fechamento, 'tipo': 'venda', 'preco': preco_fechamento, 'retorno': retorno_pct_individual})
+
+                # Calcula o lucro da operação pendente
+                lucro_total = (preco_fechamento - preco_entrada) * quantidade
+                df_operacao = df.loc[posicao:data_fechamento].copy()
+                num_dias = len(df_operacao)
+                if num_dias > 1:
+                    df_operacao['retorno'] = df_operacao['Close'].pct_change().fillna(0) * quantidade
+                else:
+                    df_operacao['retorno'] = lucro_total
+
+                df.loc[posicao:data_fechamento, 'retorno_diario'] = df_operacao['retorno']
+                posicao = None # Garante que não fique posição aberta para o próximo split
+
+
+        # Preenche valores nulos com zero (dias sem operação)
+        df["retorno_diario"] = df["retorno_diario"].fillna(0)
+
+        # Calcula o lucro total acumulado
+        retorno_total = df["retorno_diario"].sum()
+
+        # Calcula o retorno percentual sobre o capital alocado
         retorno_pct = (retorno_total / capital) * 100
-        vol_diaria = df['retorno_diario'].std()
-        sharpe = (df['retorno_diario'].mean() * 252) / vol_diaria if vol_diaria > 0 else 0
+
+        # Calcula a volatilidade anualizada
+        vol_anual = df["retorno_diario"].std() * np.sqrt(252)
+
+        # Calcula o índice de Sharpe anualizado (retorno médio dividido pela volatilidade)
+        # TODO ENTENDER MELHOR ESSE CONCEITO E FAZER MELHOR
+        sharpe = (df["retorno_diario"].mean() * 252) / vol_anual if vol_anual > 0 else 0
 
         # Armazena os resultados do modelo
         resultados_modelos.append({
@@ -111,7 +144,7 @@ def testar_modelos_ml(df, capital):
                 'retorno_pct': retorno_pct,
                 'sharpe': sharpe,
                 'lucro_total': retorno_total,
-                'vol': vol_diaria
+                'vol': vol_anual
             }
         })
 

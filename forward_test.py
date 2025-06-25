@@ -14,7 +14,7 @@ capital = 10000
 inicio_treino = "2020-01-01"
 fim_treino = "2022-12-31"
 inicio_forward = "2023-01-01"
-fim_forward = "2024-06-01"
+fim_forward = "2025-06-24"
 
 # Parâmetros fixos (simulação como se escolhidos no treino)
 rsi = 30
@@ -24,7 +24,7 @@ k_buy, k_sell = 30, 70
 d_buy, d_sell = 30, 70
 
 # Baixar dados
-df = yf.download(ticker, start=inicio_treino, end=fim_forward)
+df = yf.download(ticker, start=inicio_treino, end=fim_forward, auto_adjust=False)
 df.columns = [col[0] for col in df.columns]
 df = calcular_todos_indicadores(df)
 df.dropna(inplace=True)

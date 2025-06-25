@@ -11,7 +11,7 @@ import os
 TICKER = "PETR4.SA"
 CAPITAL = 10000
 INICIO = "2020-01-01"
-FIM = "2024-06-01"
+FIM = "2025-06-24"
 PERIODO_JANELA = 180  # dias (~6 meses)
 
 # Parâmetros fixos para exemplo
@@ -22,7 +22,7 @@ K_BUY, K_SELL = 30, 70
 D_BUY, D_SELL = 30, 70
 
 # Baixar dados e indicadores
-df = yf.download(TICKER, start=INICIO, end=FIM)
+df = yf.download(TICKER, start=INICIO, end=FIM, auto_adjust=False)
 df.columns = [col[0] for col in df.columns]
 df = calcular_todos_indicadores(df)
 df.dropna(inplace=True)

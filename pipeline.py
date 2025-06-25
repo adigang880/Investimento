@@ -20,11 +20,10 @@ from concurrent.futures import ThreadPoolExecutor  # Permite paralelizar múltip
 # df = fundamentalist_filters(webscraping(True), 's') # (alternativo via filtros fundamentalistas)
 # tickers = df['Ativo'].tolist()
 # tickers = [f"{ticker}.SA" for ticker in tickers]
-tickers = [
-    "PETR4.SA"]  # , "VALE3.SA", "BBAS3.SA"] # Lista de ativos a analisar.
+tickers = ["PETR4.SA", "VALE3.SA", "BBAS3.SA"] # Lista de ativos a analisar.
 capital_total = 10000  # Capital inicial total para simulação
 data_inicio = "2020-01-01"
-data_fim = "2020-06-23"
+data_fim = "2025-06-24"
 
 # Criação de pastas para armazenar arquivos temporários e logs
 os.makedirs("cache", exist_ok=True)
@@ -59,7 +58,7 @@ def processar_ativo(ticker):
     if os.path.exists(cache_path):
         df = pd.read_parquet(cache_path)
     else:
-        df = yf.download(ticker, start=data_inicio, end=data_fim)
+        df = yf.download(ticker, start=data_inicio, end=data_fim, auto_adjust=False)
         df.columns = [col[0] for col in df.columns]
         df.to_parquet(cache_path)
 

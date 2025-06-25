@@ -33,7 +33,7 @@ def salvar_sinais_json(lista_sinais, caminho):
                 'modelo': item['tipo'],  # Origem do modelo: 'tecnica' ou 'ml'
                 'params': item['params'],  # Parâmetros usados para gerar esse sinal
                 'sharpe': round(item['resultado']['sharpe'], 2),  # Índice de Sharpe da estratégia
-                'retorno': round(item['resultado']['retorno_pct'], 2),  # Retorno percentual da estratégia
+                'retorno': round(sinal.get('retorno', item['resultado']['retorno_pct']), 2),  # Retorno percentual da estratégia
                 'alocacao': item['alocacao']  # Valor alocado no ativo
             })
 

@@ -36,7 +36,9 @@ if ativo_sel != "Todos":
 
 # Métricas gerais
 total_alocado = sinais["alocacao"].mean()
-lucro_estimado = ((sinais["retorno"] * sinais["alocacao"])/100).sum()
+sinais["retorno"] = pd.to_numeric(sinais["retorno"], errors="coerce")
+sinais_venda = sinais[sinais["tipo"] == "venda"]
+lucro_estimado = ((sinais_venda["retorno"] * sinais_venda["alocacao"]) / 100).sum()
 sharpe_medio = sinais["sharpe"].mean()
 
 col1, col2, col3 = st.columns(3)
@@ -46,11 +48,15 @@ col3.metric("🤝 Sharpe Médio", f"{sharpe_medio:.2f}")
 
 # Ranking de ativos
 st.subheader("🏆 Ranking dos Ativos (Sharpe Ratio)")
-ranking = sinais.groupby("ativo").agg({
+ranking = (sinais.groupby("ativo").agg({
     "sharpe": "mean",
     "retorno": "mean",
     "alocacao": "sum"
-}).sort_values("sharpe", ascending=False)
+}).rename(columns={
+        "sharpe": "sharpe médio",
+        "retorno": "retorno médio %"
+    }).sort_values("sharpe médio", ascending=False))
+
 st.dataframe(ranking.style.format("{:.2f}"))
 
 # Gráfico comparativo com IBOV
@@ -106,6 +112,7 @@ colunas_formatadas = {
 colunas_visiveis = ["ativo", "data", "tipo", "preco", "modelo", "params", "sharpe", "retorno", "alocacao"]
 if set(colunas_visiveis).issubset(sinais.columns):
     detalhes = sinais[colunas_visiveis].sort_values("data", ascending=False)
+    detalhes = detalhes.rename(columns={"retorno": "retorno médio %"})
     st.dataframe(detalhes.reset_index(drop=True).style.format(colunas_formatadas))
 else:
     st.warning("Algumas colunas esperadas não estão presentes no arquivo de sinais.")
