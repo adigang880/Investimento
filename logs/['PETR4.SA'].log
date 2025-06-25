@@ -1,0 +1,9 @@
+Ticker: ['PETR4.SA']
+Tipo: tecnica
+Modelo: estrategia_tecnica
+Params: {'rsi': 35, 'macd': (10, 20, 5), 'stoch': (20, 4), 'kd_thresholds': (30, 70)}
+Sharpe: 0.45
+Retorno: 7.62%
+Sinais: 26
+Último sinal: 2020-06-22 00:00:00
+Atualizado em: 2025-06-25 11:12:47.815053

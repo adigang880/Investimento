@@ -35,12 +35,12 @@ if ativo_sel != "Todos":
     sinais = sinais[sinais["ativo"] == ativo_sel]
 
 # Métricas gerais
-total_alocado = sinais["alocacao"].sum()
-lucro_estimado = (sinais["retorno"] / 100 * sinais["alocacao"]).sum()
+total_alocado = sinais["alocacao"].mean()
+lucro_estimado = ((sinais["retorno"] * sinais["alocacao"])/100).sum()
 sharpe_medio = sinais["sharpe"].mean()
 
 col1, col2, col3 = st.columns(3)
-col1.metric("💰 Total Alocado", f"R$ {total_alocado:,.2f}")
+col1.metric("💰 Alocação Média", f"R$ {total_alocado:,.2f}")
 col2.metric("📈 Lucro Estimado", f"R$ {lucro_estimado:,.2f}")
 col3.metric("🤝 Sharpe Médio", f"{sharpe_medio:.2f}")
 
