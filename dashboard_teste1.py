@@ -7,9 +7,10 @@ import yfinance as yf
 import numpy as np
 import os
 
-#streamlit run dashboard.py
+# streamlit run dashboard_teste1.py
 st.set_page_config(layout="wide")
 st.title("📊 Dashboard de Estratégias e Sinais")
+
 
 @st.cache_data
 def carregar_sinais():
@@ -20,6 +21,7 @@ def carregar_sinais():
     except Exception as e:
         st.error(f"Erro ao carregar dados: {e}")
         return pd.DataFrame()
+
 
 sinais = carregar_sinais()
 if sinais.empty:
@@ -53,12 +55,16 @@ st.dataframe(ranking.style.format("{:.2f}"))
 
 # Gráfico comparativo com IBOV
 st.subheader("🌎 Comparação com IBOV")
+
+
 @st.cache_data
 def carregar_ibov():
     ibov = yf.download("^BVSP", start=sinais["data"].min(), end=datetime.datetime.now())
+    ibov.columns = [col[0] for col in ibov.columns]
     ibov = ibov["Close"].pct_change().fillna(0)
     ibov = (1 + ibov).cumprod()
     return ibov
+
 
 ibov = carregar_ibov()
 
@@ -74,10 +80,13 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Drawdown
 st.subheader("📉 Análise de Drawdown")
+
+
 def calcular_drawdown(serie):
     acumulado = serie.cummax()
     drawdown = (serie - acumulado) / acumulado
     return drawdown
+
 
 carteira["dd"] = calcular_drawdown(carteira["cum"])
 fig_dd = go.Figure()

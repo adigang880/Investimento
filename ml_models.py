@@ -13,17 +13,18 @@ modelos = {
     'xgboost': XGBClassifier(eval_metric='logloss')
 }
 
+
 def gerar_labels(df):
     df['target'] = (df['Close'].shift(-1) > df['Close']).astype(int)
     return df.dropna()
+
 
 def testar_modelos_ml(df, capital):
     df = gerar_labels(df)
     features = ['RSI', 'MACD', 'MACD_signal', '%K', '%D', 'ATR', 'SMA', 'EMA', 'OBV', 'ROC']
     df = df.dropna()
     X = df[features]
-    y = df['target']
-    y = y.astype(int)
+    y = df['target'].astype(int)
 
     tscv = TimeSeriesSplit(n_splits=5)
     resultados_modelos = []
@@ -31,42 +32,48 @@ def testar_modelos_ml(df, capital):
     for nome_modelo, modelo in modelos.items():
         sinais = []
         posicao = None
-        lucro = 0
-        banca = capital
+        quantidade = 0
+        df['retorno_diario'] = 0.0
 
         for train_idx, test_idx in tscv.split(X):
             X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-            y_train = y.iloc[train_idx].values.ravel()
-            y_test = y.iloc[test_idx].values.ravel()
-
+            y_train = y.iloc[train_idx]
             modelo.fit(X_train, y_train)
             y_pred = modelo.predict(X_test)
 
             for i, pred in zip(test_idx, y_pred):
+                preco = df['Close'].iloc[i]
+                data = df.index[i]
+
                 if posicao is None and pred == 1:
-                    sinais.append({'data': df.index[i], 'tipo': 'compra', 'preco': df['Close'].iloc[i]})
-                    posicao = df['Close'].iloc[i]
+                    sinais.append({'data': data, 'tipo': 'compra', 'preco': preco})
+                    posicao = data
+                    preco_entrada = preco
+                    quantidade = capital / preco
                 elif posicao is not None and pred == 0:
-                    sinais.append({'data': df.index[i], 'tipo': 'venda', 'preco': df['Close'].iloc[i]})
-                    lucro += (df['Close'].iloc[i] - posicao) * (banca / posicao)
+                    sinais.append({'data': data, 'tipo': 'venda', 'preco': preco})
+                    df_operacao = df.loc[posicao:data].copy()
+                    df_operacao['retorno'] = df_operacao['Close'].pct_change().fillna(0) * quantidade
+                    df.loc[posicao:data, 'retorno_diario'] = df_operacao['retorno']
                     posicao = None
 
-        retorno_pct = (lucro / capital) * 100
-        volatilidade = np.std(df['Close'].pct_change()) * 100
-        retorno_decimal = retorno_pct / 100
-        volatilidade_decimal = volatilidade / 100
-        sharpe = retorno_decimal / (volatilidade_decimal + 1e-6)
+        df['retorno_diario'] = df['retorno_diario'].fillna(0)
+        retorno_total = df['retorno_diario'].sum()
+        retorno_pct = (retorno_total / capital) * 100
+        vol_diaria = df['retorno_diario'].std()
+        sharpe = (df['retorno_diario'].mean() * 252) / vol_diaria if vol_diaria > 0 else 0
 
         resultados_modelos.append({
             'modelo': nome_modelo,
             'sinais': sinais,
             'resultado': {
                 'retorno_pct': retorno_pct,
-                'sharpe': sharpe
+                'sharpe': sharpe,
+                'lucro_total': retorno_total,
+                'vol': vol_diaria
             }
         })
 
-    # Ordenar pelos melhores
     resultados_modelos.sort(key=lambda x: x['resultado']['sharpe'], reverse=True)
     melhor = resultados_modelos[0]
     return melhor['sinais'], melhor['resultado']

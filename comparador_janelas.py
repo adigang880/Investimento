@@ -2,10 +2,10 @@
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
-from strategies.tecnica_manual import gerar_sinais_tecnicos
-from strategies.ml_models import testar_modelos_ml
-from evaluation.metrics import avaliar_estrategia
-from indicators.indicadores import calcular_todos_indicadores
+from tecnica_manual import gerar_sinais_tecnicos
+from ml_models import testar_modelos_ml
+from metrics import avaliar_estrategia
+from indicadores import calcular_todos_indicadores
 import os
 
 # Configurações
