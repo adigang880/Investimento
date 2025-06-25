@@ -4,8 +4,8 @@ import requests
 import pandas as pd
 from datetime import datetime
 
-TOKEN = '7043331439:AAFg1xP3WlU-96qn1pDRtcRbKTFaDSV0vX4'
-CHAT_ID = '6644531818'
+TOKEN = ""
+CHAT_ID = ""
 
 CAMINHO_ALERTAS = 'logs/alertas_automaticos.csv'
 #adigangBot
